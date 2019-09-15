@@ -10,6 +10,31 @@
           "description": "Kundenkuerzel (3 Buchstaben)"
         }
       },
+      "DCVMCount": {
+        "type": "int",
+        "defaultValue": 2,
+        "allowedValues": [
+          1,
+          2,
+          5
+        ],
+        "metadata": {
+          "description": "Number of VMs to deploy, limit 5"
+        }
+      },
+      "APPVMCount": {
+        "type": "int",
+        "defaultValue": 2,
+        "allowedValues": [
+          1,
+          2,
+          5
+        ],
+        "metadata": {
+          "description": "Number of VMs to deploy, limit 5"
+        }
+      },
+
       "_artifactsLocation": {
         "type": "string",
         "metadata": {
@@ -26,8 +51,10 @@
     }
     },
     "variables": {
-        "nestedtemplateUri": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/storage_and_availabilitySets.json', parameters('_artifactsLocationSasToken')))]"
+        "nestedtemplateUri1": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/storage_and_availabilitySets.json', parameters('_artifactsLocationSasToken')))]",
+        "nestedtemplateUri2": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/pip.json', parameters('_artifactsLocationSasToken')))]"
   },
+
 
   "resources": [
     {
@@ -37,10 +64,25 @@
         "properties": {
             "mode": "Incremental",
             "templateLink": {
-              "uri": "[variables('nestedtemplateUri')]"
+              "uri": "[variables('nestedtemplateUri1')]"
             },
             "parameters": {
                 "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" }
+            }
+        }
+      },
+      {
+        "name": "pip",
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2018-05-01",
+        "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri": "[variables('nestedtemplateUri2')]"
+            },
+            "parameters": {
+                "DCVMCount":{"value": "[parameters('DCVMCount')]" },
+                "APPVMCount": {"value": "[parameters('APPVMCount')]" }
             }
         }
       }
