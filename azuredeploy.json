@@ -20,7 +20,7 @@
         "properties": {
             "mode": "Incremental",
             "templateLink": {
-              "uri":"https://raw.githubusercontent.com/sredlin/nestedtemplate/master/storage_and_availabilitySets.json"
+              "uri":"https://raw.githubusercontent.com/sredlin/nestedtemplate/master/nestedtemplates/storage_and_availabilitySets.json"
             },
             "parameters": {
                 "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" }
