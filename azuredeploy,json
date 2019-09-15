@@ -2,22 +2,33 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
-  "parameters": {  },
+  "parameters": {
+    "Kundenkuerzel": {
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 3,
+        "metadata": {
+          "description": "Kundenkuerzel (3 Buchstaben)"
+        }
+      }
+    },
   "variables": {  },
 
-"resources": [
-  {
-    "type": "Microsoft.Resources/deployments",
-    "apiVersion": "2018-05-01",
-    "name": "linkedTemplate",
-    "properties": {
-    "mode": "Incremental",
-    "templateLink": {
-        "uri":"https%3A%2F%2Fraw.githubusercontent.com%2Fsredlin%2Fnestedtemplate%2Fmaster%2Fstorage_and_availabilitySets.json",
-        "contentVersion":"1.0.0.0"
-    }
-   
-    }
-  }
-]
+  "resources": [
+    {
+        "name": "linkedTemplate",
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2018-05-01",
+        "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+                "uri":"https://armtutorials.blob.core.windows.net/linkedtemplates/linkedStorageAccount.json"
+            },
+            "parameters": {
+                "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" }
+            }
+        }
+      }
+  ]
+  
 }
