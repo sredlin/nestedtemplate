@@ -4,9 +4,6 @@
     "parameters": {
         "Kundenkuerzel": {
             "type": "string",
-            "value" : "null",
-            "minLength": 3,
-            "maxLength": 3,
             "metadata": {
             "description": "Kundenkuerzel (3 Buchstaben)"
             }

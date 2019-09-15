@@ -31,7 +31,7 @@
 
   "resources": [
     {
-        "name": "linkedTemplate",
+        "name": "storage_and_availabilitySets",
         "type": "Microsoft.Resources/deployments",
         "apiVersion": "2018-05-01",
         "properties": {
