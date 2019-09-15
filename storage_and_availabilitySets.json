@@ -1,0 +1,58 @@
+
+
+
+
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "variables": {
+        "location": "[resourceGroup().location]",
+        "DiagStorageName": "[tolower(concat(parameters('Kundenkuerzel'),'sadiag'))]",
+        "DiagStorageType": "Standard_LRS",
+        "availabilitySetNameDC": "[tolower(concat(parameters('Kundenkuerzel'),'-as-dc'))]",
+        "availabilitySetNameAPP": "[tolower(concat(parameters('Kundenkuerzel'),'-as-app'))]"
+      }, 
+    "resources": [
+    {
+      "type": "Microsoft.Compute/availabilitySets",
+      "apiVersion": "2019-03-01",
+      "name": "[variables('availabilitySetNameDC')]",
+      "location": "[variables('location')]",
+      "sku": {
+        "name": "Aligned"
+      },
+      "properties": {
+        "platformUpdateDomainCount": 2,
+        "platformFaultDomainCount": 2
+
+      }
+    },
+    {
+        "type": "Microsoft.Compute/availabilitySets",
+        "apiVersion": "2019-03-01",
+        "name": "[variables('availabilitySetNameApp')]",
+        "location": "[variables('location')]",
+        "sku": {
+          "name": "Aligned"
+        },
+        "properties": {
+          "platformUpdateDomainCount": 2,
+          "platformFaultDomainCount": 2
+  
+        }
+      },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('DiagStorageName')]",
+      "apiVersion": "2015-06-15",
+      "location": "[variables('location')]",
+      "tags": {
+        "displayName": "StorageAccount"
+      },
+      "properties": {
+        "accountType": "[variables('DiagStorageType')]"
+      }
+    }
+    ]
+}
