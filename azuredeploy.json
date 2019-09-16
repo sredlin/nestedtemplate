@@ -135,7 +135,7 @@
         }
       },
       {
-        "name": "vnet",
+        "name": "nic",
         "type": "Microsoft.Resources/deployments",
         "apiVersion": "2018-05-01",
         "dependsOn": [ "pip" ],
