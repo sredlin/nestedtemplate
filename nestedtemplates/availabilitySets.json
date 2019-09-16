@@ -11,8 +11,6 @@
         },
     "variables": {
         "location": "[resourceGroup().location]",
-        "DiagStorageName": "[tolower(concat(parameters('Kundenkuerzel'),'sadiag'))]",
-        "DiagStorageType": "Standard_LRS",
         "availabilitySetNameDC": "[tolower(concat(parameters('Kundenkuerzel'),'-as-dc'))]",
         "availabilitySetNameAPP": "[tolower(concat(parameters('Kundenkuerzel'),'-as-app'))]"
       }, 
@@ -44,18 +42,7 @@
           "platformFaultDomainCount": 2
   
         }
-      },
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('DiagStorageName')]",
-      "apiVersion": "2015-06-15",
-      "location": "[variables('location')]",
-      "tags": {
-        "displayName": "StorageAccount"
-      },
-      "properties": {
-        "accountType": "[variables('DiagStorageType')]"
       }
-    }
+   
     ]
 }

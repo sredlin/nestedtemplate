@@ -51,20 +51,50 @@
     }
     },
     "variables": {
-        "nestedtemplateUri1": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/storage_and_availabilitySets.json', parameters('_artifactsLocationSasToken')))]",
-        "nestedtemplateUri2": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/pip.json', parameters('_artifactsLocationSasToken')))]"
+        "nestedtemplateUriStorage": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/storage.json', parameters('_artifactsLocationSasToken')))]",
+        "nestedtemplateUriavailabilitySets": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/availabilitySets.json', parameters('_artifactsLocationSasToken')))]",
+        "nestedtemplateUrinsg": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/nsg.json', parameters('_artifactsLocationSasToken')))]",
+        "nestedtemplateUripip": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/pip.json', parameters('_artifactsLocationSasToken')))]"
   },
 
 
   "resources": [
     {
-        "name": "storage_and_availabilitySets",
+        "name": "storage",
         "type": "Microsoft.Resources/deployments",
         "apiVersion": "2018-05-01",
         "properties": {
             "mode": "Incremental",
             "templateLink": {
-              "uri": "[variables('nestedtemplateUri1')]"
+              "uri": "[variables('nestedtemplateUriStorage')]"
+            },
+            "parameters": {
+                "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" }
+            }
+        }
+      },
+      {
+        "name": "availabilitySets",
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2018-05-01",
+        "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri": "[variables('nestedtemplateUriavailabilitySets')]"
+            },
+            "parameters": {
+                "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" }
+            }
+        }
+      },
+      {
+        "name": "nsg",
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2018-05-01",
+        "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri": "[variables('nestedtemplateUrinsg')]"
             },
             "parameters": {
                 "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" }
@@ -78,7 +108,7 @@
         "properties": {
             "mode": "Incremental",
             "templateLink": {
-              "uri": "[variables('nestedtemplateUri2')]"
+              "uri": "[variables('nestedtemplateUripip')]"
             },
             "parameters": {
                 "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" },
