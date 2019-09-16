@@ -55,7 +55,7 @@
         "nestedtemplateUriavailabilitySets": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/availabilitySets.json', parameters('_artifactsLocationSasToken')))]",
         "nestedtemplateUrinsg": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/nsg.json', parameters('_artifactsLocationSasToken')))]",
         "nestedtemplateUripip": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/pip.json', parameters('_artifactsLocationSasToken')))]",
-        "nestedtemplateUrivnet": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/pip.json', parameters('_artifactsLocationSasToken')))]"
+        "nestedtemplateUrivnet": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/vnet.json', parameters('_artifactsLocationSasToken')))]"
   },
 
 
@@ -129,7 +129,7 @@
               "uri": "[variables('nestedtemplateUrivnet')]"
             },
             "parameters": {
-                "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" },
+                "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" }
             }
         }
       }
