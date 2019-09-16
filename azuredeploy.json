@@ -55,7 +55,8 @@
         "nestedtemplateUriavailabilitySets": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/availabilitySets.json', parameters('_artifactsLocationSasToken')))]",
         "nestedtemplateUrinsg": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/nsg.json', parameters('_artifactsLocationSasToken')))]",
         "nestedtemplateUripip": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/pip.json', parameters('_artifactsLocationSasToken')))]",
-        "nestedtemplateUrivnet": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/vnet.json', parameters('_artifactsLocationSasToken')))]"
+        "nestedtemplateUrivnet": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/vnet.json', parameters('_artifactsLocationSasToken')))]",
+        "nestedtemplateUrinic": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/nic.json', parameters('_artifactsLocationSasToken')))]"
   },
 
 
@@ -127,6 +128,21 @@
             "mode": "Incremental",
             "templateLink": {
               "uri": "[variables('nestedtemplateUrivnet')]"
+            },
+            "parameters": {
+                "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" }
+            }
+        }
+      },
+      {
+        "name": "vnet",
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2018-05-01",
+        "dependsOn": [ "pip" ],
+        "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri": "[variables('nestedtemplateUrinic')]"
             },
             "parameters": {
                 "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" }
