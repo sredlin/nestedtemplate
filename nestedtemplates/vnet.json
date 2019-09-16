@@ -1,0 +1,68 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "Kundenkuerzel": {
+            "type": "string",
+            "metadata": {
+            "description": "Kundenkuerzel (3 Buchstaben)"
+            }
+          }
+        },
+    "variables": {
+        "location": "[resourceGroup().location]",
+        "nsgNameInfrastructure" :  "[tolower(concat(parameters('Kundenkuerzel'),'-nsg-infrastructure'))]",
+        "virtualNetworkName": "[tolower(concat(parameters('Kundenkuerzel'),'-vn-infrastructure'))]",
+        "nsgIDInfrastructure": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('nsgNameInfrastructure'))]",
+        "subnetPrefixDC": "10.0.0.0/24",
+        "subnetNameDC": "[tolower(concat('sn-dc'))]",
+        "subnetPrefixAPP": "10.0.1.0/24",
+        "subnetNameAPP": "[tolower(concat('sn-app'))]",
+        "addressPrefix": "10.0.0.0/16",
+        "gatewaySubnet": "GatewaySubnet",
+        "gatewaySubnetPrefix": "10.0.254.0/28"
+
+      }, 
+    "resources": [
+        {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[variables('virtualNetworkName')]",
+            "location": "[variables('location')]",
+              "properties": {
+              "addressSpace": {
+                "addressPrefixes": [
+                  "[variables('addressPrefix')]"
+                ]
+              },
+              "subnets": [
+                {
+                  "name": "[variables('subnetNameDC')]",
+                  "properties": {
+                    "addressPrefix": "[variables('subnetPrefixDC')]",
+                    "networkSecurityGroup": {
+                      "id": "[variables('nsgIDInfrastructure')]"
+                    }
+                  }
+                },
+                {
+                    "name": "[variables('subnetNameApp')]",
+                    "properties": {
+                      "addressPrefix": "[variables('subnetPrefixAPP')]",
+                      "networkSecurityGroup": {
+                        "id": "[variables('nsgIDInfrastructure')]"
+                      }
+                    }
+                  },
+                {
+                  "name": "[variables('gatewaySubnet')]",
+                  "properties": {
+                    "addressPrefix": "[variables('gatewaySubnetPrefix')]"
+                  }
+                }
+              ]
+            }
+          }
+
+    ]
+}
