@@ -56,7 +56,10 @@
         "nestedtemplateUrinsg": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/nsg.json', parameters('_artifactsLocationSasToken')))]",
         "nestedtemplateUripip": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/pip.json', parameters('_artifactsLocationSasToken')))]",
         "nestedtemplateUrivnet": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/vnet.json', parameters('_artifactsLocationSasToken')))]",
-        "nestedtemplateUrinic": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/nic.json', parameters('_artifactsLocationSasToken')))]"
+        "nestedtemplateUrinic": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/nic.json', parameters('_artifactsLocationSasToken')))]",
+        "location": "[resourceGroup().location]",
+        "DiagStorageName": "[tolower(concat(parameters('Kundenkuerzel'),'sadiag'))]",
+        "DiagStorageType": "Standard_LRS"
   },
 
 
@@ -70,9 +73,11 @@
             "templateLink": {
               "uri": "[variables('nestedtemplateUriStorage')]"
             },
-            "parameters": {
-                "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" }
-            }
+            "variables": {
+              "location":{"value": "[variables('location')]" },
+              "DiagStorageName" :{"value": "[variables('DiagStorageName')]" },
+              "DiagStorageType" :{"value": "[variables('DiagStorageType')]" }
+          }
         }
       },
       {
