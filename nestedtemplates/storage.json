@@ -5,24 +5,9 @@
        
         },
     "variables": {
-        "location": {
-          "type": "string",
-          "metadata": {
-          "description": "Kundenkuerzel (3 Buchstaben)"
-          }
-        },
-        "DiagStorageName": {
-          
-          "metadata": {
-          "description": "Name des Diagnoseaccounts)"
-          }
-        },
-        "DiagStorageType": {
-          
-          "metadata": {
-          "description": "Storagetyp des Diagnoseaccounts"
-          }
-        }
+        "location": "[variables('location')]",
+        "DiagStorageName": "[variables('DiagStorageName')]",
+        "DiagStorageType": "[variables('DiagStorageType')]"
       }, 
     "resources": [
        {
