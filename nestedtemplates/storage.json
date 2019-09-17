@@ -12,15 +12,15 @@
           }
         },
         "DiagStorageName": {
-          "type": "string",
+          
           "metadata": {
-          "description": "Kundenkuerzel (3 Buchstaben)"
+          "description": "Name des Diagnoseaccounts)"
           }
         },
         "DiagStorageType": {
-          "type": "string",
+          
           "metadata": {
-          "description": "Kundenkuerzel (3 Buchstaben)"
+          "description": "Storagetyp des Diagnoseaccounts"
           }
         }
       }, 
