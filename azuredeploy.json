@@ -73,14 +73,11 @@
             "templateLink": {
               "uri": "[variables('nestedtemplateUriStorage')]"
             },
-            "variables": {
-              "location":{"value": "[variables('location')]" },
-              "DiagStorageName" :{"value": "[variables('DiagStorageName')]" },
-              "DiagStorageType" :{"value": "[variables('DiagStorageType')]" }
+            "parameters": {
+              "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" } }
           }
-        }
-      },
-      {
+        },
+            {
         "name": "availabilitySets",
         "type": "Microsoft.Resources/deployments",
         "apiVersion": "2018-05-01",

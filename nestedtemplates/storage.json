@@ -2,13 +2,18 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-       
-        },
-    "variables": {
-        "location": "[variables('location')]",
-        "DiagStorageName": "[variables('DiagStorageName')]",
-        "DiagStorageType": "[variables('DiagStorageType')]"
-      }, 
+      "Kundenkuerzel": {
+          "type": "string",
+          "metadata": {
+          "description": "Kundenkuerzel (3 Buchstaben)"
+          }
+        }
+      },
+  "variables": {
+      "location": "[resourceGroup().location]",
+      "DiagStorageName": "[tolower(concat(parameters('Kundenkuerzel'),'sadiag'))]",
+      "DiagStorageType": "Standard_LRS"
+    }, 
     "resources": [
        {
       "type": "Microsoft.Storage/storageAccounts",
