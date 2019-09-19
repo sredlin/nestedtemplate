@@ -47,7 +47,7 @@
         {
             "apiVersion": "2017-03-30",
             "type": "Microsoft.Compute/virtualMachines",
-            "name": "[concat(variables('vmNameDC'))]",
+            "name": "[concat(variables('vmNameDC'),copyindex(1))]",
             "location": "[variables('location')]",
             "copy": {
                 "name": "dcLoop",
