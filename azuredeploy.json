@@ -62,6 +62,7 @@
         "nestedtemplateUripip": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/pip.json', parameters('_artifactsLocationSasToken')))]",
         "nestedtemplateUrivnet": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/vnet.json', parameters('_artifactsLocationSasToken')))]",
         "nestedtemplateUrinic": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/nic.json', parameters('_artifactsLocationSasToken')))]",
+        "nestedtemplateUrivm": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/vm.json', parameters('_artifactsLocationSasToken')))]"
   },
 
 
@@ -148,6 +149,28 @@
             "mode": "Incremental",
             "templateLink": {
               "uri": "[variables('nestedtemplateUrinic')]"
+            },
+            "parameters": {
+                "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" },
+                "DCVMCount":{"value": "[parameters('DCVMCount')]" },
+                "APPVMCount": {"value": "[parameters('APPVMCount')]" }
+                
+            }
+        }
+      },
+      {
+        "name": "vm",
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2018-05-01",
+        "dependsOn": [ "pip",
+                      "vnet",
+                      "storage",
+                      "nsg",
+                      "availabilitySets"],
+        "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri": "[variables('nestedtemplateUrivm')]"
             },
             "parameters": {
                 "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" },

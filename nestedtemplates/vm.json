@@ -28,7 +28,8 @@
       "imageOffer": "WindowsServer",
       "VMStorageType": "Standard_LRS",
       "vmDataDiskCount": 2,
-      "vmDataDiskSize": "15"
+      "vmDataDiskSize": "15",
+      "charactersToSkip": 7
     }, 
     "resources": [
         {
@@ -81,7 +82,7 @@
               "networkProfile": {
                 "networkInterfaces": [
                   {
-                    "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(tolower(concat(parameters('Kundenkuerzel'),'-nic-',skip(concat(variables('vmNameDC'),copyindex(1)),variables('charactersToSkip')))),))]"
+                    "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(tolower(concat(parameters('Kundenkuerzel'),'-nic-',skip(concat(variables('vmNameDC'),copyindex(1)),variables('charactersToSkip'))))))]"
                   }
                 ]
               },
