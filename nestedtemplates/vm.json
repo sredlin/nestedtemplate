@@ -59,7 +59,7 @@
                 "vmSize": "[variables('vmSizeDC')]"
               },
               "osProfile": {
-                "computerName": "[variables('vmNameDC')]",
+                "computerName": "[concat(variables('vmNameDC'),copyindex(1))]",
                 "adminUsername": "[variables('vmAdminUsername')]",
                 "adminPassword": "[parameters('vmAdminPassword')]"
               },
