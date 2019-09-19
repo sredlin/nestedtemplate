@@ -13,6 +13,18 @@
             "metadata": {
               "description": "Password for the Virtual Machine."
             }
+          },
+          "DCVMCount": {
+            "type": "int",
+            "metadata": {
+              "description": "Number of VMs to deploy, limit 5"
+            }
+          },
+          "APPVMCount": {
+            "type": "int",
+            "metadata": {
+              "description": "Number of VMs to deploy, limit 5"
+            }
           }
       },
         "variables": {
@@ -37,6 +49,10 @@
             "type": "Microsoft.Compute/virtualMachines",
             "name": "[concat(variables('vmNameDC'))]",
             "location": "[variables('location')]",
+            "copy": {
+                "name": "dcLoop",
+                "count": "[parameters('DCVMCount')]"
+              },
            
             "properties": {
               "hardwareProfile": {
