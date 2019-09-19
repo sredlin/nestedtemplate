@@ -1,0 +1,102 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "Kundenkuerzel": {
+          "type": "string",
+          "metadata": {
+          "description": "Kundenkuerzel (3 Buchstaben)"
+          }
+        },
+        "vmAdminPassword": {
+            "type": "securestring",
+            "metadata": {
+              "description": "Password for the Virtual Machine."
+            }
+          }
+      },
+        "variables": {
+      "location": "[resourceGroup().location]",
+      "DiagStorageName": "[tolower(concat(parameters('Kundenkuerzel'),'sadiag'))]",
+      "vmNameDC": "[tolower(concat(parameters('Kundenkuerzel'),'-vm-dc'))]",
+      "vmSizeDC": "Standard_B2s",
+      "vmAdminUsername": "vbu-adm",
+      "vmOsSku": "2019-Datacenter",
+      "vmOsDiskName": "[concat(variables('vmNameDC'),'-osdisk')]",
+      "vmDataDiskName": "[concat(variables('vmNameDC'),'-datadisk')]",
+      "imagePublisher": "MicrosoftWindowsServer",
+      "imageOffer": "WindowsServer",
+      "VMStorageType": "Standard_LRS",
+      "vmDataDiskCount": 2,
+      "vmDataDiskSize": "15"
+    }, 
+    "resources": [
+        {
+            "apiVersion": "2017-03-30",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[concat(variables('vmNameDC'))]",
+            "location": "[variables('location')]",
+           
+            "properties": {
+              "hardwareProfile": {
+                "vmSize": "[variables('vmSizeDC')]"
+              },
+              "osProfile": {
+                "computerName": "[variables('vmNameDC')]",
+                "adminUsername": "[variables('vmAdminUsername')]",
+                "adminPassword": "[parameters('vmAdminPassword')]"
+              },
+              "storageProfile": {
+                "imageReference": {
+                  "publisher": "[variables('imagePublisher')]",
+                  "offer": "[variables('imageOffer')]",
+                  "sku": "[variables('vmOsSku')]",
+                  "version": "latest"
+                },
+                "osDisk": {
+                  "name": "[concat(variables('vmOsDiskName'))]",
+                  "caching": "ReadWrite",
+                  "createOption": "FromImage",
+                  "managedDisk": {
+                    "storageAccountType": "[variables('VMStorageType')]"
+                  }
+                },
+      
+                "copy": [
+                  {
+                    "name": "dataDisks",
+                    "count": "[variables('vmDataDiskCount')]",
+                    "input": {
+                      "name": "[concat(variables('vmDataDiskName'),'-',copyIndex('dataDisks'))]",
+                      "diskSizeGB": "[variables('vmDataDiskSize')]",
+                      "lun": "[copyIndex('dataDisks')]",
+                      "createOption": "Empty",
+                      "managedDisk": {
+                        "storageAccountType": "[variables('VMStorageType')]"
+                      }
+                    }
+                  }
+                ]
+              },
+              "networkProfile": {
+                "networkInterfaces": [
+                  {
+                    "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(tolower(concat(parameters('Kundenkuerzel'),'-nic-',skip(concat(variables('vmNameDC'),copyindex(1)),variables('charactersToSkip')))),))]"
+                  }
+                ]
+              },
+              "diagnosticsProfile": {
+                "bootDiagnostics": {
+                  "enabled": true,
+                  "storageUri": "[concat('http://', variables('DiagStorageName'), '.blob.core.windows.net')]"
+                }
+            }
+        }
+          }
+        ]
+    
+    }
+
+
+
+

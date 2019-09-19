@@ -34,7 +34,12 @@
           "description": "Number of VMs to deploy, limit 5"
         }
       },
-
+      "vmAdminPassword": {
+        "type": "securestring",
+        "metadata": {
+          "description": "Password for the Virtual Machine."
+        }
+      },
       "_artifactsLocation": {
         "type": "string",
         "metadata": {
@@ -57,9 +62,6 @@
         "nestedtemplateUripip": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/pip.json', parameters('_artifactsLocationSasToken')))]",
         "nestedtemplateUrivnet": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/vnet.json', parameters('_artifactsLocationSasToken')))]",
         "nestedtemplateUrinic": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/nic.json', parameters('_artifactsLocationSasToken')))]",
-        "location": "[resourceGroup().location]",
-        "DiagStorageName": "[tolower(concat(parameters('Kundenkuerzel'),'sadiag'))]",
-        "DiagStorageType": "Standard_LRS"
   },
 
 
@@ -150,7 +152,8 @@
             "parameters": {
                 "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" },
                 "DCVMCount":{"value": "[parameters('DCVMCount')]" },
-                "APPVMCount": {"value": "[parameters('APPVMCount')]" }
+                "APPVMCount": {"value": "[parameters('APPVMCount')]" },
+                "vmAdminPassword" :{"value": "[parameters('vmAdminPassword')]" }
             }
         }
       }
