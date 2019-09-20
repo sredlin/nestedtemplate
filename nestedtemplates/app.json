@@ -28,10 +28,9 @@
       "vmSizeAPP": "Standard_B2s",
       "vmAdminUsername": "vbu-adm",
       "vmOsSku": "2019-Datacenter",
-      "vmOsDiskNameApp": "[concat(variables('vmNameApp'),'-osdisk')]",
       "imagePublisher": "MicrosoftWindowsServer",
       "imageOffer": "WindowsServer",
-      "VMStorageTypeApp": "Standard_LRS",
+      "VMStorageTypeApp": "Premium_LRS",
       "vmDataDiskCountApp": 4,
       "vmDataDiskSize": "15",
       "charactersToSkip": 7
@@ -64,7 +63,7 @@
                   "version": "latest"
                 },
                 "osDisk": {
-                  "name": "[concat(variables('vmOsDiskNameAPP'),copyindex(1))]",
+                  "name": "[concat(variables('vmNameApp'),copyindex(1),'-osdisk')]",
                   "caching": "ReadWrite",
                   "createOption": "FromImage",
                   "managedDisk": {

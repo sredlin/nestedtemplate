@@ -29,7 +29,6 @@
       "vmSizeDC": "Standard_B2s",
       "vmAdminUsername": "vbu-adm",
       "vmOsSku": "2019-Datacenter",
-      "vmOsDiskNameDC": "[concat(variables('vmNameDC'),'-osdisk')]",
       "imagePublisher": "MicrosoftWindowsServer",
       "imageOffer": "WindowsServer",
       "VMStorageTypeDC": "Standard_LRS",
@@ -65,7 +64,7 @@
                   "version": "latest"
                 },
                 "osDisk": {
-                  "name": "[concat(variables('vmOsDiskNameDC'),copyindex(1))]",
+                  "name": "[concat(variables('vmNameDc'),copyindex(1),'-osdisk')]",
                   "caching": "ReadWrite",
                   "createOption": "FromImage",
                   "managedDisk": {
