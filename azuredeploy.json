@@ -176,7 +176,6 @@
             "parameters": {
                 "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" },
                 "DCVMCount":{"value": "[parameters('DCVMCount')]" },
-                "APPVMCount": {"value": "[parameters('APPVMCount')]" },
                 "vmAdminPassword" :{"value": "[parameters('vmAdminPassword')]" }
             }
         }
@@ -198,7 +197,6 @@
             },
             "parameters": {
                 "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" },
-                "DCVMCount":{"value": "[parameters('DCVMCount')]" },
                 "APPVMCount": {"value": "[parameters('APPVMCount')]" },
                 "vmAdminPassword" :{"value": "[parameters('vmAdminPassword')]" }
             }
