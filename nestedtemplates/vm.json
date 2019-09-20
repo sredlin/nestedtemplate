@@ -71,7 +71,7 @@
                   "version": "latest"
                 },
                 "osDisk": {
-                  "name": "[concat(variables('vmOsDiskName'))]",
+                  "name": "[concat(variables('vmOsDiskName'),copyindex(1))]",
                   "caching": "ReadWrite",
                   "createOption": "FromImage",
                   "managedDisk": {
@@ -84,7 +84,7 @@
                     "name": "dataDisks",
                     "count": "[variables('vmDataDiskCount')]",
                     "input": {
-                      "name": "[concat(variables('vmDataDiskName'),'-',copyIndex('dataDisks'))]",
+                      "name": "[concat(variables('vmDataDiskName'),copyindex(1),'-',copyIndex('dataDisks'))]",
                       "diskSizeGB": "[variables('vmDataDiskSize')]",
                       "lun": "[copyIndex('dataDisks')]",
                       "createOption": "Empty",
