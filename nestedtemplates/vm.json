@@ -35,7 +35,6 @@
       "vmAdminUsername": "vbu-adm",
       "vmOsSku": "2019-Datacenter",
       "vmOsDiskName": "[concat(variables('vmNameDC'),'-osdisk')]",
-      "vmDataDiskName": "[concat(variables('vmNameDC'),'-datadisk')]",
       "imagePublisher": "MicrosoftWindowsServer",
       "imageOffer": "WindowsServer",
       "VMStorageType": "Standard_LRS",
@@ -84,7 +83,7 @@
                     "name": "dataDisks",
                     "count": "[variables('vmDataDiskCount')]",
                     "input": {
-                      "name": "[concat(variables('vmDataDiskName'),copyindex(1),'-',copyIndex('dataDisks'))]",
+                      "name": "[concat(variables('vmNameDC'),copyindex(1),'-datadisk','-',copyIndex('dataDisks'))]",
                       "diskSizeGB": "[variables('vmDataDiskSize')]",
                       "lun": "[copyIndex('dataDisks')]",
                       "createOption": "Empty",
