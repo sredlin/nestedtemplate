@@ -31,7 +31,7 @@
       "vmOsDiskNameApp": "[concat(variables('vmNameApp'),'-osdisk')]",
       "imagePublisher": "MicrosoftWindowsServer",
       "imageOffer": "WindowsServer",
-      "VMStorageTypeApp": "Standard_SSD",
+      "VMStorageTypeApp": "Standard_LRS",
       "vmDataDiskCountApp": 4,
       "vmDataDiskSize": "15",
       "charactersToSkip": 7
