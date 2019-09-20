@@ -62,7 +62,8 @@
         "nestedtemplateUripip": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/pip.json', parameters('_artifactsLocationSasToken')))]",
         "nestedtemplateUrivnet": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/vnet.json', parameters('_artifactsLocationSasToken')))]",
         "nestedtemplateUrinic": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/nic.json', parameters('_artifactsLocationSasToken')))]",
-        "nestedtemplateUrivm": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/vm.json', parameters('_artifactsLocationSasToken')))]"
+        "nestedtemplateUridc": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/dc.json', parameters('_artifactsLocationSasToken')))]",
+        "nestedtemplateUriapp": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/app.json', parameters('_artifactsLocationSasToken')))]"
   },
 
 
@@ -159,7 +160,7 @@
         }
       },
       {
-        "name": "vm",
+        "name": "dc",
         "type": "Microsoft.Resources/deployments",
         "apiVersion": "2018-05-01",
         "dependsOn": [ "pip",
@@ -170,7 +171,30 @@
         "properties": {
             "mode": "Incremental",
             "templateLink": {
-              "uri": "[variables('nestedtemplateUrivm')]"
+              "uri": "[variables('nestedtemplateUridc')]"
+            },
+            "parameters": {
+                "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" },
+                "DCVMCount":{"value": "[parameters('DCVMCount')]" },
+                "APPVMCount": {"value": "[parameters('APPVMCount')]" },
+                "vmAdminPassword" :{"value": "[parameters('vmAdminPassword')]" }
+            }
+        }
+      },
+      {
+        "name": "app",
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2018-05-01",
+        "dependsOn": [ "pip",
+                      "vnet",
+                      "storage",
+                      "nsg",
+                      "availabilitySets",
+                    "dc"],
+        "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri": "[variables('nestedtemplateUriapp')]"
             },
             "parameters": {
                 "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" },

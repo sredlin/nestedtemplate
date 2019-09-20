@@ -19,31 +19,21 @@
             "metadata": {
               "description": "Number of VMs to deploy, limit 5"
             }
-          },
-          "APPVMCount": {
-            "type": "int",
-            "metadata": {
-              "description": "Number of VMs to deploy, limit 5"
-            }
           }
+          
       },
       "variables": {
       "location": "[resourceGroup().location]",
       "DiagStorageName": "[tolower(concat(parameters('Kundenkuerzel'),'sadiag'))]",
       "vmNameDC": "[tolower(concat(parameters('Kundenkuerzel'),'-vm-dc'))]",
-      "vmNameApp": "[tolower(concat(parameters('Kundenkuerzel'),'-vm-dc'))]",
       "vmSizeDC": "Standard_B2s",
-      "vmSizeAPP": "Standard_B2s",
       "vmAdminUsername": "vbu-adm",
       "vmOsSku": "2019-Datacenter",
       "vmOsDiskNameDC": "[concat(variables('vmNameDC'),'-osdisk')]",
-      "vmOsDiskNameApp": "[concat(variables('vmNameApp'),'-osdisk')]",
       "imagePublisher": "MicrosoftWindowsServer",
       "imageOffer": "WindowsServer",
       "VMStorageTypeDC": "Standard_LRS",
-      "VMStorageTypeApp": "Standard_SSD",
       "vmDataDiskCountDC": 2,
-      "vmDataDiskCountApp": 4,
       "vmDataDiskSize": "15",
       "charactersToSkip": 7
     }, 
@@ -113,73 +103,8 @@
                 }
             }
         }
-          },
-          {
-            "apiVersion": "2017-03-30",
-            "type": "Microsoft.Compute/virtualMachines",
-            "name": "[concat(variables('vmNameApp'),copyindex(1))]",
-            "location": "[variables('location')]",
-            "copy": {
-                "name": "dcLoop",
-                "count": "[parameters('AppVMCount')]"
-              },
-           
-            "properties": {
-              "hardwareProfile": {
-                "vmSize": "[variables('vmSizeApp')]"
-              },
-              "osProfile": {
-                "computerName": "[concat(variables('vmNameApp'),copyindex(1))]",
-                "adminUsername": "[variables('vmAdminUsername')]",
-                "adminPassword": "[parameters('vmAdminPassword')]"
-              },
-              "storageProfile": {
-                "imageReference": {
-                  "publisher": "[variables('imagePublisher')]",
-                  "offer": "[variables('imageOffer')]",
-                  "sku": "[variables('vmOsSku')]",
-                  "version": "latest"
-                },
-                "osDisk": {
-                  "name": "[concat(variables('vmOsDiskNameAPP'),copyindex(1))]",
-                  "caching": "ReadWrite",
-                  "createOption": "FromImage",
-                  "managedDisk": {
-                    "storageAccountType": "[variables('VMStorageTypeApp')]"
-                  }
-                },
-      
-                "copy": [
-                  {
-                    "name": "dataDisks",
-                    "count": "[variables('vmDataDiskCountApp')]",
-                    "input": {
-                      "name": "[concat(variables('vmNameApp'),copyindex(1),'-datadisk','-',copyIndex('dataDisks'))]",
-                      "diskSizeGB": "[variables('vmDataDiskSize')]",
-                      "lun": "[copyIndex('dataDisks')]",
-                      "createOption": "Empty",
-                      "managedDisk": {
-                        "storageAccountType": "[variables('VMStorageTypeApp')]"
-                      }
-                    }
-                  }
-                ]
-              },
-              "networkProfile": {
-                "networkInterfaces": [
-                  {
-                    "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(tolower(concat(parameters('Kundenkuerzel'),'-nic-',skip(concat(variables('vmNameApp'),copyindex(1)),variables('charactersToSkip'))))))]"
-                  }
-                ]
-              },
-              "diagnosticsProfile": {
-                "bootDiagnostics": {
-                  "enabled": true,
-                  "storageUri": "[concat('http://', variables('DiagStorageName'), '.blob.core.windows.net')]"
-                }
-            }
-        }
           }
+         
         ]
     
     }
