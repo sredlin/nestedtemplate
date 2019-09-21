@@ -40,6 +40,76 @@
           "description": "Password for the Virtual Machine."
         }
       },
+      "vpnType": {
+        "type": "string",
+        "metadata": {
+          "description": "Route based (Dynamic Gateway) or Policy based (Static Gateway)"
+        },
+        "defaultValue": "RouteBased",
+        "allowedValues": [
+          "RouteBased",
+          "PolicyBased"
+        ]
+      },
+      "localGatewayName": {
+        "type": "string",
+        "defaultValue": "localGateway",
+        "metadata": {
+          "description": "Arbitrary name for gateway resource representing your local/on-prem gateway"
+        }
+      },
+      "localGatewayIpAddress": {
+        "type": "string",
+        "metadata": {
+          "description": "Public IP of your local/on-prem gateway"
+        }
+      },
+      "localAddressPrefix": {
+        "type": "string",
+        "metadata": {
+          "description": "CIDR block representing the address space of your local/on-prem network's Subnet"
+        }
+    },
+      "gatewayPublicIPName": {
+        "type": "string",
+        "defaultValue": "azureGatewayIP",
+        "metadata": {
+          "description": "Arbitrary name for public IP resource used for the new azure gateway"
+        }
+      },
+      "gatewayName": {
+        "type": "string",
+        "defaultValue": "azureGateway",
+        "metadata": {
+          "description": "Arbitrary name for the new gateway"
+        }
+      },
+      "gatewaySku": {
+        "type": "string",
+        "defaultValue": "Basic",
+        "allowedValues": [
+          "Basic",
+          "Standard",
+          "HighPerformance"
+        ],
+        "metadata": {
+          "description": "The Sku of the Gateway. This must be one of Basic, Standard or HighPerformance."
+        }
+      },
+      "connectionName": {
+        "type": "string",
+        "defaultValue": "Azure2Other",
+        "metadata": {
+          "description": "Arbitrary name for the new connection between Azure VNet and other network"
+        }
+      },
+      "sharedKey": {
+        "type": "string",
+        "metadata": {
+          "description": "Shared key (PSK) for IPSec tunnel"
+        }
+      },
+
       "_artifactsLocation": {
         "type": "string",
         "metadata": {
@@ -63,7 +133,8 @@
         "nestedtemplateUrivnet": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/vnet.json', parameters('_artifactsLocationSasToken')))]",
         "nestedtemplateUrinic": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/nic.json', parameters('_artifactsLocationSasToken')))]",
         "nestedtemplateUridc": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/dc.json', parameters('_artifactsLocationSasToken')))]",
-        "nestedtemplateUriapp": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/app.json', parameters('_artifactsLocationSasToken')))]"
+        "nestedtemplateUriapp": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/app.json', parameters('_artifactsLocationSasToken')))]",
+        "nestedtemplateUrigw": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/gw.json', parameters('_artifactsLocationSasToken')))]"
   },
 
 
@@ -199,6 +270,37 @@
                 "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" },
                 "APPVMCount": {"value": "[parameters('APPVMCount')]" },
                 "vmAdminPassword" :{"value": "[parameters('vmAdminPassword')]" }
+            }
+        }
+      },
+      {
+        "name": "vpn",
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2018-05-01",
+        "dependsOn": [ "pip",
+                      "vnet",
+                      "storage",
+                      "nsg",
+                      "availabilitySets"
+                    ],
+        "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri": "[variables('nestedtemplateUrigw')]"
+            },
+            "parameters": {
+                "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" },
+                "vpnType":{"value": "[parameters('vpnType')]" },
+                "localGatewayName":{"value": "[parameters('localGatewayName')]" },
+                "localGatewayIpAddress":{"value": "[parameters('localGatewayIpAddress')]" },
+                "gatewayPublicIPName":{"value": "[parameters('gatewayPublicIPName')]" },
+                "localAddressPrefix":{"value": "[parameters('localAddressPrefix')]" },
+                "gatewayName":{"value": "[parameters('gatewayName')]" },
+                "gatewaySku":{"value": "[parameters('gatewaySku')]" },
+                "connectionName":{"value": "[parameters('connectionName')]" },
+                "sharedKey":{"value": "[parameters('sharedKey')]" }
+
+
             }
         }
       }

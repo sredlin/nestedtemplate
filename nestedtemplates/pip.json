@@ -27,7 +27,8 @@
         "charactersToSkip": 7,
         "vmNameDC": "[tolower(concat(parameters('Kundenkuerzel'),'-vm-dc'))]",
         "vmNameAPP": "[tolower(concat(parameters('Kundenkuerzel'),'-vm-app'))]",
-        "publicIPAddressType": "Dynamic"
+        "publicIPAddressType": "Dynamic",
+        "publicIPAddressTypeGW" :"Static"
       }, 
     "resources": [
         {
@@ -59,6 +60,19 @@
               "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
               "dnsSettings": {
                 "domainNameLabel": "[tolower(concat(parameters('Kundenkuerzel'),'-dns-',skip(concat(variables('vmNameAPP'),copyindex(1)),variables('charactersToSkip'))))]"
+              }
+            }
+          },
+          {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[tolower(concat(parameters('Kundenkuerzel'),'-pip-gw'))]",
+            "location": "[variables('location')]",
+           
+            "properties": {
+              "publicIPAllocationMethod": "[variables('publicIPAddressTypeGW')]",
+              "dnsSettings": {
+                "domainNameLabel": "[tolower(concat(parameters('Kundenkuerzel'),'-dns-gw'))]"
               }
             }
           }
