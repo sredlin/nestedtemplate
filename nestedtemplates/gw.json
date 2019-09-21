@@ -32,20 +32,9 @@
           "description": "CIDR block representing the address space of your local/on-prem network's Subnet"
         }
     },
-      "gatewayPublicIPName": {
-        "type": "string",
-        "defaultValue": "azureGatewayIP",
-        "metadata": {
-          "description": "Arbitrary name for public IP resource used for the new azure gateway"
-        }
-      },
-      "gatewayName": {
-        "type": "string",
-        "defaultValue": "azureGateway",
-        "metadata": {
-          "description": "Arbitrary name for the new gateway"
-        }
-      },
+     
+      
+     
       "gatewaySku": {
         "type": "string",
         "defaultValue": "Basic",
@@ -86,7 +75,9 @@
      
       "gatewaySubnetRef": "[concat(variables('vnetID'),'/subnets/', 'GatewaySubnet')]",
       "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
-      "virtualNetworkName": "[tolower(concat(parameters('Kundenkuerzel'),'-vn-infrastructure'))]"
+      "virtualNetworkName": "[tolower(concat(parameters('Kundenkuerzel'),'-vn-infrastructure'))]",
+      "gatewayPublicIPName":"[tolower(concat(parameters('Kundenkuerzel'),'-pip-gw'))]",
+      "gatewayName" : "[tolower(concat(parameters('Kundenkuerzel'),'-gw'))]"
     },
     "resources": [
       {
@@ -111,7 +102,7 @@
         
         "properties": {
           "virtualNetworkGateway1": {
-            "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('gatewayName'))]"
+            "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', variables('gatewayName'))]"
           },
           "localNetworkGateway2": {
             "id": "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localGatewayName'))]"
@@ -126,7 +117,7 @@
       {
         "apiVersion": "2018-07-01",
         "type": "Microsoft.Network/virtualNetworkGateways",
-        "name": "[parameters('gatewayName')]",
+        "name": "[variables('gatewayName')]",
         "location": "[resourceGroup().location]",
         
         "properties": {
@@ -138,7 +129,7 @@
                   "id": "[variables('gatewaySubnetRef')]"
                 },
                 "publicIPAddress": {
-                  "id": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('gatewayPublicIPName'))]"
+                  "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('gatewayPublicIPName'))]"
                 }
               },
               "name": "vnetGatewayConfig"
