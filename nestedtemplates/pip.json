@@ -28,7 +28,7 @@
         "vmNameDC": "[tolower(concat(parameters('Kundenkuerzel'),'-vm-dc'))]",
         "vmNameAPP": "[tolower(concat(parameters('Kundenkuerzel'),'-vm-app'))]",
         "publicIPAddressType": "Dynamic",
-        "publicIPAddressTypeGW" :"Static"
+        "publicIPAddressTypeGW" : "Dynamic"
       }, 
     "resources": [
         {
