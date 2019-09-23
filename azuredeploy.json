@@ -51,13 +51,7 @@
           "PolicyBased"
         ]
       },
-      "localGatewayName": {
-        "type": "string",
-        "defaultValue": "localGateway",
-        "metadata": {
-          "description": "Arbitrary name for gateway resource representing your local/on-prem gateway"
-        }
-      },
+      
       "localGatewayIpAddress": {
         "type": "string",
         "metadata": {
@@ -70,21 +64,7 @@
           "description": "CIDR block representing the address space of your local/on-prem network's Subnet"
         }
     },
-      "gatewayPublicIPName": {
-        "type": "string",
-        "defaultValue": "azureGatewayIP",
-        "metadata": {
-          "description": "Arbitrary name for public IP resource used for the new azure gateway"
-        }
-      },
-      "gatewayName": {
-        "type": "string",
-        "defaultValue": "azureGateway",
-        "metadata": {
-          "description": "Arbitrary name for the new gateway"
-        }
-      },
-      "gatewaySku": {
+    "gatewaySku": {
         "type": "string",
         "defaultValue": "Basic",
         "allowedValues": [
@@ -291,11 +271,9 @@
             "parameters": {
                 "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" },
                 "vpnType":{"value": "[parameters('vpnType')]" },
-                "localGatewayName":{"value": "[parameters('localGatewayName')]" },
                 "localGatewayIpAddress":{"value": "[parameters('localGatewayIpAddress')]" },
-                "gatewayPublicIPName":{"value": "[parameters('gatewayPublicIPName')]" },
                 "localAddressPrefix":{"value": "[parameters('localAddressPrefix')]" },
-                "gatewayName":{"value": "[parameters('gatewayName')]" },
+               
                 "gatewaySku":{"value": "[parameters('gatewaySku')]" },
                 "connectionName":{"value": "[parameters('connectionName')]" },
                 "sharedKey":{"value": "[parameters('sharedKey')]" }

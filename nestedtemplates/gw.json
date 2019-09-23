@@ -13,14 +13,7 @@
           "PolicyBased"
         ]
       },
-      "localGatewayName": {
-        "type": "string",
-        "defaultValue": "localGateway",
-        "metadata": {
-          "description": "Arbitrary name for gateway resource representing your local/on-prem gateway"
-        }
-      },
-      "localGatewayIpAddress": {
+        "localGatewayIpAddress": {
         "type": "string",
         "metadata": {
           "description": "Public IP of your local/on-prem gateway"
@@ -76,14 +69,15 @@
       "gatewaySubnetRef": "[concat(variables('vnetID'),'/subnets/', 'GatewaySubnet')]",
       "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
       "virtualNetworkName": "[tolower(concat(parameters('Kundenkuerzel'),'-vn-infrastructure'))]",
-      "gatewayPublicIPName":"[tolower(concat(parameters('Kundenkuerzel'),'-pip-gw'))]",
-      "gatewayName" : "[tolower(concat(parameters('Kundenkuerzel'),'-gw'))]"
+      "gatewayPublicIPName":"[tolower(concat(parameters('Kundenkuerzel'),'-dns-gw'))]",
+      "gatewayName" : "[tolower(concat(parameters('Kundenkuerzel'),'-gw-azure'))]",
+      "localGatewayName" : "[tolower(concat(parameters('Kundenkuerzel'),'-gw-local'))]"
     },
     "resources": [
       {
         "apiVersion": "2018-07-01",
         "type": "Microsoft.Network/localNetworkGateways",
-        "name": "[parameters('localGatewayName')]",
+        "name": "[variables('localGatewayName')]",
         "location": "[resourceGroup().location]",
         "properties": {
           "localNetworkAddressSpace": {
@@ -105,7 +99,7 @@
             "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', variables('gatewayName'))]"
           },
           "localNetworkGateway2": {
-            "id": "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localGatewayName'))]"
+            "id": "[resourceId('Microsoft.Network/localNetworkGateways', variables('localGatewayName'))]"
           },
           "connectionType": "IPsec",
           "routingWeight": 10,
