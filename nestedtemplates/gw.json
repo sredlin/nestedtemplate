@@ -40,19 +40,6 @@
           "description": "The Sku of the Gateway. This must be one of Basic, Standard or HighPerformance."
         }
       },
-      "connectionName": {
-        "type": "string",
-        "defaultValue": "Azure2Other",
-        "metadata": {
-          "description": "Arbitrary name for the new connection between Azure VNet and other network"
-        }
-      },
-      "sharedKey": {
-        "type": "string",
-        "metadata": {
-          "description": "Shared key (PSK) for IPSec tunnel"
-        }
-      },
       "Kundenkuerzel": {
         "type": "string",
         "metadata": {
@@ -117,28 +104,6 @@
           "vpnType": "[parameters('vpnType')]",
           "enableBgp": false
         }
-      },
-      {
-        "apiVersion": "2018-07-01",
-        "name": "[parameters('connectionName')]",
-        "type": "Microsoft.Network/connections",
-        "location": "[resourceGroup().location]",
-        "dependsOn": [
-          "[concat('Microsoft.Network/publicIPAddresses/', variables('gatewayPublicIPName'))]"],
-        
-        "properties": {
-          "virtualNetworkGateway1": {
-            "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', variables('gatewayName'))]"
-          },
-          "localNetworkGateway2": {
-            "id": "[resourceId('Microsoft.Network/localNetworkGateways', variables('localGatewayName'))]"
-          },
-          "connectionType": "IPsec",
-          "routingWeight": 10,
-          "sharedKey": "[parameters('sharedKey')]"
-        }
       }
-
-
     ]
   }

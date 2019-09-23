@@ -1,0 +1,55 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "connectionName": {
+        "type": "string",
+        "defaultValue": "Azure2Other",
+        "metadata": {
+          "description": "Arbitrary name for the new connection between Azure VNet and other network"
+        }
+      },
+      "sharedKey": {
+        "type": "string",
+        "metadata": {
+          "description": "Shared key (PSK) for IPSec tunnel"
+        }
+      },
+      "Kundenkuerzel": {
+        "type": "string",
+        "metadata": {
+        "description": "Kundenkuerzel (3 Buchstaben)"
+        }
+      }
+
+
+      
+      
+    },
+    "variables": {
+     
+      "gatewayName" : "[tolower(concat(parameters('Kundenkuerzel'),'-gw-azure'))]",
+      "localGatewayName" : "[tolower(concat(parameters('Kundenkuerzel'),'-gw-local'))]"
+    },
+    "resources": [
+      {
+        "apiVersion": "2018-07-01",
+        "name": "[parameters('connectionName')]",
+        "type": "Microsoft.Network/connections",
+        "location": "[resourceGroup().location]",
+    
+        "properties": {
+          "virtualNetworkGateway1": {
+            "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', variables('gatewayName'))]"
+          },
+          "localNetworkGateway2": {
+            "id": "[resourceId('Microsoft.Network/localNetworkGateways', variables('localGatewayName'))]"
+          },
+          "connectionType": "IPsec",
+          "routingWeight": 10,
+          "sharedKey": "[parameters('sharedKey')]"
+        }
+      }
+
+    ]
+  }

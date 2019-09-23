@@ -114,8 +114,10 @@
         "nestedtemplateUrinic": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/nic.json', parameters('_artifactsLocationSasToken')))]",
         "nestedtemplateUridc": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/dc.json', parameters('_artifactsLocationSasToken')))]",
         "nestedtemplateUriapp": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/app.json', parameters('_artifactsLocationSasToken')))]",
-        "nestedtemplateUrigw": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/gw.json', parameters('_artifactsLocationSasToken')))]"
-  },
+        "nestedtemplateUrigw": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/gw.json', parameters('_artifactsLocationSasToken')))]",
+        "nestedtemplateUriconnection": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/connection.json', parameters('_artifactsLocationSasToken')))]"
+
+      },
 
 
   "resources": [
@@ -273,8 +275,30 @@
                 "vpnType":{"value": "[parameters('vpnType')]" },
                 "localGatewayIpAddress":{"value": "[parameters('localGatewayIpAddress')]" },
                 "localAddressPrefix":{"value": "[parameters('localAddressPrefix')]" },
-               
-                "gatewaySku":{"value": "[parameters('gatewaySku')]" },
+                "gatewaySku":{"value": "[parameters('gatewaySku')]" }
+
+
+            }
+        }
+      },
+      {
+        "name": "connections",
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2018-05-01",
+        "dependsOn": [ "pip",
+                      "vnet",
+                      "storage",
+                      "nsg",
+                      "availabilitySets",
+                      "vpn"
+                    ],
+        "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri": "[variables('nestedtemplateUriconnection')]"
+            },
+            "parameters": {
+                "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" },
                 "connectionName":{"value": "[parameters('connectionName')]" },
                 "sharedKey":{"value": "[parameters('sharedKey')]" }
 
@@ -282,6 +306,7 @@
             }
         }
       }
+
   ]
   
 }
