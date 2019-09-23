@@ -69,7 +69,7 @@
       "gatewaySubnetRef": "[concat(variables('vnetID'),'/subnets/', 'GatewaySubnet')]",
       "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
       "virtualNetworkName": "[tolower(concat(parameters('Kundenkuerzel'),'-vn-infrastructure'))]",
-      "gatewayPublicIPName":"[tolower(concat(parameters('Kundenkuerzel'),'-dns-gw'))]",
+      "gatewayPublicIPName":"[tolower(concat(parameters('Kundenkuerzel'),'-pip-gw'))]",
       "gatewayName" : "[tolower(concat(parameters('Kundenkuerzel'),'-gw-azure'))]",
       "localGatewayName" : "[tolower(concat(parameters('Kundenkuerzel'),'-gw-local'))]"
     },
