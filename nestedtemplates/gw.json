@@ -90,26 +90,6 @@
       },
       {
         "apiVersion": "2018-07-01",
-        "name": "[parameters('connectionName')]",
-        "type": "Microsoft.Network/connections",
-        "location": "[resourceGroup().location]",
-        
-        "properties": {
-          "virtualNetworkGateway1": {
-            "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', variables('gatewayName'))]"
-          },
-          "localNetworkGateway2": {
-            "id": "[resourceId('Microsoft.Network/localNetworkGateways', variables('localGatewayName'))]"
-          },
-          "connectionType": "IPsec",
-          "routingWeight": 10,
-          "sharedKey": "[parameters('sharedKey')]"
-        }
-      },
-
-
-      {
-        "apiVersion": "2018-07-01",
         "type": "Microsoft.Network/virtualNetworkGateways",
         "name": "[variables('gatewayName')]",
         "location": "[resourceGroup().location]",
@@ -136,6 +116,26 @@
           "gatewayType": "Vpn",
           "vpnType": "[parameters('vpnType')]",
           "enableBgp": false
+        }
+      },
+      {
+        "apiVersion": "2018-07-01",
+        "name": "[parameters('connectionName')]",
+        "type": "Microsoft.Network/connections",
+        "location": "[resourceGroup().location]",
+        "dependsOn": [
+          "[concat('Microsoft.Network/publicIPAddresses/', variables('gatewayPublicIPName'))]"],
+        
+        "properties": {
+          "virtualNetworkGateway1": {
+            "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', variables('gatewayName'))]"
+          },
+          "localNetworkGateway2": {
+            "id": "[resourceId('Microsoft.Network/localNetworkGateways', variables('localGatewayName'))]"
+          },
+          "connectionType": "IPsec",
+          "routingWeight": 10,
+          "sharedKey": "[parameters('sharedKey')]"
         }
       }
 
