@@ -112,7 +112,11 @@
 			"name": "Microsoft.Insights.VMDiagnosticsSettings",
 			"type": "Microsoft.Compute/virtualMachines/extensions",
 			"location": "[variables('location')]",
-			"apiVersion": "2015-06-15",
+      "apiVersion": "2015-06-15",
+      "copy": {
+				"name": "extensionLoop",
+				"count": "[parameters('DCVMCount')]"
+			},
 			"dependsOn": [
 				"[concat('Microsoft.Compute/virtualMachines/', variables('vmNameDC'),copyindex(1))]"
 			],
