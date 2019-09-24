@@ -220,7 +220,8 @@
                       "vnet",
                       "storage",
                       "nsg",
-                      "availabilitySets"],
+                      "availabilitySets",
+                    "nic"],
         "properties": {
             "mode": "Incremental",
             "templateLink": {
@@ -242,7 +243,7 @@
                       "storage",
                       "nsg",
                       "availabilitySets",
-                    "dc"],
+                    "nic"],
         "properties": {
             "mode": "Incremental",
             "templateLink": {
