@@ -109,7 +109,7 @@
 			}
 		},
 		{
-			"name": "Microsoft.Insights.VMDiagnosticsSettings",
+			"name": "[concat(variables('vmNameDC'),copyindex(1),'/AzureDiagnostics')]",
 			"type": "Microsoft.Compute/virtualMachines/extensions",
 			"location": "[variables('location')]",
       "apiVersion": "2015-06-15",
