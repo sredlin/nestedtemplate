@@ -1,48 +1,45 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "Kundenkuerzel": {
-            "type": "string",
-            "metadata": {
-            "description": "Kundenkuerzel (3 Buchstaben)"
-            }
-          }
-        },
-    "variables": {
-        "location": "[resourceGroup().location]",
-        "availabilitySetNameDC": "[tolower(concat(parameters('Kundenkuerzel'),'-as-dc'))]",
-        "availabilitySetNameAPP": "[tolower(concat(parameters('Kundenkuerzel'),'-as-app'))]"
-      }, 
-    "resources": [
-    {
-      "type": "Microsoft.Compute/availabilitySets",
-      "apiVersion": "2019-03-01",
-      "name": "[variables('availabilitySetNameDC')]",
-      "location": "[variables('location')]",
-      "sku": {
-        "name": "Aligned"
-      },
-      "properties": {
-        "platformUpdateDomainCount": 2,
-        "platformFaultDomainCount": 2
-
-      }
-    },
-    {
-        "type": "Microsoft.Compute/availabilitySets",
-        "apiVersion": "2019-03-01",
-        "name": "[variables('availabilitySetNameApp')]",
-        "location": "[variables('location')]",
-        "sku": {
-          "name": "Aligned"
-        },
-        "properties": {
-          "platformUpdateDomainCount": 2,
-          "platformFaultDomainCount": 2
-  
-        }
-      }
-   
-    ]
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"Kundenkuerzel": {
+			"type": "string",
+			"metadata": {
+				"description": "Kundenkuerzel (3 Buchstaben)"
+			}
+		}
+	},
+	"variables": {
+		"location": "[resourceGroup().location]",
+		"availabilitySetNameDC": "[tolower(concat(parameters('Kundenkuerzel'),'-as-dc'))]",
+		"availabilitySetNameAPP": "[tolower(concat(parameters('Kundenkuerzel'),'-as-app'))]"
+	},
+	"resources": [
+		{
+			"type": "Microsoft.Compute/availabilitySets",
+			"apiVersion": "2019-03-01",
+			"name": "[variables('availabilitySetNameDC')]",
+			"location": "[variables('location')]",
+			"sku": {
+				"name": "Aligned"
+			},
+			"properties": {
+				"platformUpdateDomainCount": 2,
+				"platformFaultDomainCount": 2
+			}
+		},
+		{
+			"type": "Microsoft.Compute/availabilitySets",
+			"apiVersion": "2019-03-01",
+			"name": "[variables('availabilitySetNameApp')]",
+			"location": "[variables('location')]",
+			"sku": {
+				"name": "Aligned"
+			},
+			"properties": {
+				"platformUpdateDomainCount": 2,
+				"platformFaultDomainCount": 2
+			}
+		}
+	]
 }

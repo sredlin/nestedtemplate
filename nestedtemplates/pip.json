@@ -1,80 +1,78 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "Kundenkuerzel": {
-            "type": "string",
-            "metadata": {
-            "description": "Kundenkuerzel (3 Buchstaben)"
-            }
-          },
-          "DCVMCount": {
-            "type": "int",
-            "metadata": {
-              "description": "Number of VMs to deploy, limit 5"
-            }
-          },
-          "APPVMCount": {
-            "type": "int",
-            "metadata": {
-              "description": "Number of VMs to deploy, limit 5"
-            }
-          }
-
-        },
-    "variables": {
-        "location": "[resourceGroup().location]",
-        "charactersToSkip": 7,
-        "vmNameDC": "[tolower(concat(parameters('Kundenkuerzel'),'-vm-dc'))]",
-        "vmNameAPP": "[tolower(concat(parameters('Kundenkuerzel'),'-vm-app'))]",
-        "publicIPAddressType": "Dynamic",
-        "publicIPAddressTypeGW" : "Dynamic"
-      }, 
-    "resources": [
-        {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Network/publicIPAddresses",
-            "name": "[tolower(concat(parameters('Kundenkuerzel'),'-pip-',skip(concat(variables('vmNameDC'),copyindex(1)),variables('charactersToSkip'))))]",
-            "location": "[variables('location')]",
-            "copy": {
-              "name": "publicIPLoopDC",
-              "count": "[parameters('DCVMCount')]"
-            },
-            "properties": {
-              "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
-              "dnsSettings": {
-                "domainNameLabel": "[tolower(concat(parameters('Kundenkuerzel'),'-dns-',skip(concat(variables('vmNameDC'),copyindex(1)),variables('charactersToSkip'))))]"
-              }
-            }
-          },
-          {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Network/publicIPAddresses",
-            "name": "[tolower(concat(parameters('Kundenkuerzel'),'-pip-',skip(concat(variables('vmNameAPP'),copyindex(1)),variables('charactersToSkip'))))]",
-            "location": "[variables('location')]",
-            "copy": {
-              "name": "publicIPLoopAPP",
-              "count": "[parameters('APPVMCount')]"
-            },
-            "properties": {
-              "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
-              "dnsSettings": {
-                "domainNameLabel": "[tolower(concat(parameters('Kundenkuerzel'),'-dns-',skip(concat(variables('vmNameAPP'),copyindex(1)),variables('charactersToSkip'))))]"
-              }
-            }
-          },
-          {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Network/publicIPAddresses",
-            "name": "[tolower(concat(parameters('Kundenkuerzel'),'-pip-gw'))]",
-            "location": "[variables('location')]",
-           
-            "properties": {
-              "publicIPAllocationMethod": "[variables('publicIPAddressTypeGW')]",
-              "dnsSettings": {
-                "domainNameLabel": "[tolower(concat(parameters('Kundenkuerzel'),'-dns-gw'))]"
-              }
-            }
-          }
-    ]
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"Kundenkuerzel": {
+			"type": "string",
+			"metadata": {
+				"description": "Kundenkuerzel (3 Buchstaben)"
+			}
+		},
+		"DCVMCount": {
+			"type": "int",
+			"metadata": {
+				"description": "Number of VMs to deploy, limit 5"
+			}
+		},
+		"APPVMCount": {
+			"type": "int",
+			"metadata": {
+				"description": "Number of VMs to deploy, limit 5"
+			}
+		}
+	},
+	"variables": {
+		"location": "[resourceGroup().location]",
+		"charactersToSkip": 7,
+		"vmNameDC": "[tolower(concat(parameters('Kundenkuerzel'),'-vm-dc'))]",
+		"vmNameAPP": "[tolower(concat(parameters('Kundenkuerzel'),'-vm-app'))]",
+		"publicIPAddressType": "Dynamic",
+		"publicIPAddressTypeGW": "Dynamic"
+	},
+	"resources": [
+		{
+			"apiVersion": "2015-06-15",
+			"type": "Microsoft.Network/publicIPAddresses",
+			"name": "[tolower(concat(parameters('Kundenkuerzel'),'-pip-',skip(concat(variables('vmNameDC'),copyindex(1)),variables('charactersToSkip'))))]",
+			"location": "[variables('location')]",
+			"copy": {
+				"name": "publicIPLoopDC",
+				"count": "[parameters('DCVMCount')]"
+			},
+			"properties": {
+				"publicIPAllocationMethod": "[variables('publicIPAddressType')]",
+				"dnsSettings": {
+					"domainNameLabel": "[tolower(concat(parameters('Kundenkuerzel'),'-dns-',skip(concat(variables('vmNameDC'),copyindex(1)),variables('charactersToSkip'))))]"
+				}
+			}
+		},
+		{
+			"apiVersion": "2015-06-15",
+			"type": "Microsoft.Network/publicIPAddresses",
+			"name": "[tolower(concat(parameters('Kundenkuerzel'),'-pip-',skip(concat(variables('vmNameAPP'),copyindex(1)),variables('charactersToSkip'))))]",
+			"location": "[variables('location')]",
+			"copy": {
+				"name": "publicIPLoopAPP",
+				"count": "[parameters('APPVMCount')]"
+			},
+			"properties": {
+				"publicIPAllocationMethod": "[variables('publicIPAddressType')]",
+				"dnsSettings": {
+					"domainNameLabel": "[tolower(concat(parameters('Kundenkuerzel'),'-dns-',skip(concat(variables('vmNameAPP'),copyindex(1)),variables('charactersToSkip'))))]"
+				}
+			}
+		},
+		{
+			"apiVersion": "2015-06-15",
+			"type": "Microsoft.Network/publicIPAddresses",
+			"name": "[tolower(concat(parameters('Kundenkuerzel'),'-pip-gw'))]",
+			"location": "[variables('location')]",
+			"properties": {
+				"publicIPAllocationMethod": "[variables('publicIPAddressTypeGW')]",
+				"dnsSettings": {
+					"domainNameLabel": "[tolower(concat(parameters('Kundenkuerzel'),'-dns-gw'))]"
+				}
+			}
+		}
+	]
 }

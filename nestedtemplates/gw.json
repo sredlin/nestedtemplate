@@ -1,109 +1,100 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-      "vpnType": {
-        "type": "string",
-        "metadata": {
-          "description": "Route based (Dynamic Gateway) or Policy based (Static Gateway)"
-        },
-        "defaultValue": "RouteBased",
-        "allowedValues": [
-          "RouteBased",
-          "PolicyBased"
-        ]
-      },
-        "localGatewayIpAddress": {
-        "type": "string",
-        "metadata": {
-          "description": "Public IP of your local/on-prem gateway"
-        }
-      },
-      "localAddressPrefix": {
-        "type": "string",
-        "metadata": {
-          "description": "CIDR block representing the address space of your local/on-prem network's Subnet"
-        }
-    },
-     
-      
-     
-      "gatewaySku": {
-        "type": "string",
-        "defaultValue": "Basic",
-        "allowedValues": [
-          "Basic",
-          "Standard",
-          "HighPerformance"
-        ],
-        "metadata": {
-          "description": "The Sku of the Gateway. This must be one of Basic, Standard or HighPerformance."
-        }
-      },
-      "Kundenkuerzel": {
-        "type": "string",
-        "metadata": {
-        "description": "Kundenkuerzel (3 Buchstaben)"
-        }
-      }
-
-
-      
-      
-    },
-    "variables": {
-     
-      "gatewaySubnetRef": "[concat(variables('vnetID'),'/subnets/', 'GatewaySubnet')]",
-      "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
-      "virtualNetworkName": "[tolower(concat(parameters('Kundenkuerzel'),'-vn-infrastructure'))]",
-      "gatewayPublicIPName":"[tolower(concat(parameters('Kundenkuerzel'),'-pip-gw'))]",
-      "gatewayName" : "[tolower(concat(parameters('Kundenkuerzel'),'-gw-azure'))]",
-      "localGatewayName" : "[tolower(concat(parameters('Kundenkuerzel'),'-gw-local'))]"
-    },
-    "resources": [
-      {
-        "apiVersion": "2018-07-01",
-        "type": "Microsoft.Network/localNetworkGateways",
-        "name": "[variables('localGatewayName')]",
-        "location": "[resourceGroup().location]",
-        "properties": {
-          "localNetworkAddressSpace": {
-            "addressPrefixes": [
-              "[parameters('localAddressPrefix')]"
-            ]
-          },
-          "gatewayIpAddress": "[parameters('localGatewayIpAddress')]"
-        }
-      },
-      {
-        "apiVersion": "2018-07-01",
-        "type": "Microsoft.Network/virtualNetworkGateways",
-        "name": "[variables('gatewayName')]",
-        "location": "[resourceGroup().location]",
-        
-        "properties": {
-          "ipConfigurations": [
-            {
-              "properties": {
-                "privateIPAllocationMethod": "Dynamic",
-                "subnet": {
-                  "id": "[variables('gatewaySubnetRef')]"
-                },
-                "publicIPAddress": {
-                  "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('gatewayPublicIPName'))]"
-                }
-              },
-              "name": "vnetGatewayConfig"
-            }
-          ],
-          "sku": {
-            "name": "[parameters('gatewaySku')]",
-            "tier": "[parameters('gatewaySku')]"
-          },
-          "gatewayType": "Vpn",
-          "vpnType": "[parameters('vpnType')]",
-          "enableBgp": false
-        }
-      }
-    ]
-  }
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"vpnType": {
+			"type": "string",
+			"metadata": {
+				"description": "Route based (Dynamic Gateway) or Policy based (Static Gateway)"
+			},
+			"defaultValue": "RouteBased",
+			"allowedValues": [
+				"RouteBased",
+				"PolicyBased"
+			]
+		},
+		"localGatewayIpAddress": {
+			"type": "string",
+			"metadata": {
+				"description": "Public IP of your local/on-prem gateway"
+			}
+		},
+		"localAddressPrefix": {
+			"type": "string",
+			"metadata": {
+				"description": "CIDR block representing the address space of your local/on-prem network's Subnet"
+			}
+		},
+		"gatewaySku": {
+			"type": "string",
+			"defaultValue": "Basic",
+			"allowedValues": [
+				"Basic",
+				"Standard",
+				"HighPerformance"
+			],
+			"metadata": {
+				"description": "The Sku of the Gateway. This must be one of Basic, Standard or HighPerformance."
+			}
+		},
+		"Kundenkuerzel": {
+			"type": "string",
+			"metadata": {
+				"description": "Kundenkuerzel (3 Buchstaben)"
+			}
+		}
+	},
+	"variables": {
+		"gatewaySubnetRef": "[concat(variables('vnetID'),'/subnets/', 'GatewaySubnet')]",
+		"vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
+		"virtualNetworkName": "[tolower(concat(parameters('Kundenkuerzel'),'-vn-infrastructure'))]",
+		"gatewayPublicIPName": "[tolower(concat(parameters('Kundenkuerzel'),'-pip-gw'))]",
+		"gatewayName": "[tolower(concat(parameters('Kundenkuerzel'),'-gw-azure'))]",
+		"localGatewayName": "[tolower(concat(parameters('Kundenkuerzel'),'-gw-local'))]"
+	},
+	"resources": [
+		{
+			"apiVersion": "2018-07-01",
+			"type": "Microsoft.Network/localNetworkGateways",
+			"name": "[variables('localGatewayName')]",
+			"location": "[resourceGroup().location]",
+			"properties": {
+				"localNetworkAddressSpace": {
+					"addressPrefixes": [
+						"[parameters('localAddressPrefix')]"
+					]
+				},
+				"gatewayIpAddress": "[parameters('localGatewayIpAddress')]"
+			}
+		},
+		{
+			"apiVersion": "2018-07-01",
+			"type": "Microsoft.Network/virtualNetworkGateways",
+			"name": "[variables('gatewayName')]",
+			"location": "[resourceGroup().location]",
+			"properties": {
+				"ipConfigurations": [
+					{
+						"properties": {
+							"privateIPAllocationMethod": "Dynamic",
+							"subnet": {
+								"id": "[variables('gatewaySubnetRef')]"
+							},
+							"publicIPAddress": {
+								"id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('gatewayPublicIPName'))]"
+							}
+						},
+						"name": "vnetGatewayConfig"
+					}
+				],
+				"sku": {
+					"name": "[parameters('gatewaySku')]",
+					"tier": "[parameters('gatewaySku')]"
+				},
+				"gatewayType": "Vpn",
+				"vpnType": "[parameters('vpnType')]",
+				"enableBgp": false
+			}
+		}
+	]
+}

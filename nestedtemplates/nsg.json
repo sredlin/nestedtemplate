@@ -1,42 +1,41 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "Kundenkuerzel": {
-            "type": "string",
-            "metadata": {
-            "description": "Kundenkuerzel (3 Buchstaben)"
-            }
-          }
-        },
-    "variables": {
-        "location": "[resourceGroup().location]",
-        "nsgNameInfrastructure" :  "[tolower(concat(parameters('Kundenkuerzel'),'-nsg-infrastructure'))]"
-      }, 
-    "resources": [
-        {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[variables('nsgNameInfrastructure')]",
-            "location": "[variables('location')]",
-            "properties": {
-              "securityRules": [
-                {
-                  "name": "nsgsrule",
-                  "properties": {
-                    "protocol": "*",
-                    "sourcePortRange": "*",
-                    "destinationPortRange": "*",
-                    "sourceAddressPrefix": "*",
-                    "destinationAddressPrefix": "*",
-                    "access": "Allow",
-                    "priority": 101,
-                    "direction": "Inbound"
-                  }
-                }
-              ]
-            }
-          }
-
-    ]
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"Kundenkuerzel": {
+			"type": "string",
+			"metadata": {
+				"description": "Kundenkuerzel (3 Buchstaben)"
+			}
+		}
+	},
+	"variables": {
+		"location": "[resourceGroup().location]",
+		"nsgNameInfrastructure": "[tolower(concat(parameters('Kundenkuerzel'),'-nsg-infrastructure'))]"
+	},
+	"resources": [
+		{
+			"apiVersion": "2015-06-15",
+			"type": "Microsoft.Network/networkSecurityGroups",
+			"name": "[variables('nsgNameInfrastructure')]",
+			"location": "[variables('location')]",
+			"properties": {
+				"securityRules": [
+					{
+						"name": "nsgsrule",
+						"properties": {
+							"protocol": "*",
+							"sourcePortRange": "*",
+							"destinationPortRange": "*",
+							"sourceAddressPrefix": "*",
+							"destinationAddressPrefix": "*",
+							"access": "Allow",
+							"priority": 101,
+							"direction": "Inbound"
+						}
+					}
+				]
+			}
+		}
+	]
 }

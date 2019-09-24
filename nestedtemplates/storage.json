@@ -1,32 +1,31 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-      "Kundenkuerzel": {
-          "type": "string",
-          "metadata": {
-          "description": "Kundenkuerzel (3 Buchstaben)"
-          }
-        }
-      },
-  "variables": {
-      "location": "[resourceGroup().location]",
-      "DiagStorageName": "[tolower(concat(parameters('Kundenkuerzel'),'sadiag'))]",
-      "DiagStorageType": "Standard_LRS"
-    }, 
-    "resources": [
-       {
-      "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('DiagStorageName')]",
-      "apiVersion": "2015-06-15",
-      "location": "[variables('location')]",
-      "tags": {
-        "displayName": "StorageAccount"
-      },
-      "properties": {
-        "accountType": "[variables('DiagStorageType')]"
-      }
-    }
-
-    ]
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"Kundenkuerzel": {
+			"type": "string",
+			"metadata": {
+				"description": "Kundenkuerzel (3 Buchstaben)"
+			}
+		}
+	},
+	"variables": {
+		"location": "[resourceGroup().location]",
+		"DiagStorageName": "[tolower(concat(parameters('Kundenkuerzel'),'sadiag'))]",
+		"DiagStorageType": "Standard_LRS"
+	},
+	"resources": [
+		{
+			"type": "Microsoft.Storage/storageAccounts",
+			"name": "[variables('DiagStorageName')]",
+			"apiVersion": "2015-06-15",
+			"location": "[variables('location')]",
+			"tags": {
+				"displayName": "StorageAccount"
+			},
+			"properties": {
+				"accountType": "[variables('DiagStorageType')]"
+			}
+		}
+	]
 }

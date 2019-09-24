@@ -1,313 +1,362 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "Kundenkuerzel": {
-        "type": "string",
-        "minLength": 3,
-        "maxLength": 3,
-        "metadata": {
-          "description": "Kundenkuerzel (3 Buchstaben)"
-        }
-      },
-      "DCVMCount": {
-        "type": "int",
-        "defaultValue": 2,
-        "allowedValues": [
-          1,
-          2,
-          5
-        ],
-        "metadata": {
-          "description": "Number of VMs to deploy, limit 5"
-        }
-      },
-      "APPVMCount": {
-        "type": "int",
-        "defaultValue": 2,
-        "allowedValues": [
-          1,
-          2,
-          5
-        ],
-        "metadata": {
-          "description": "Number of VMs to deploy, limit 5"
-        }
-      },
-      "vmAdminPassword": {
-        "type": "securestring",
-        "metadata": {
-          "description": "Password for the Virtual Machine."
-        }
-      },
-      "vpnType": {
-        "type": "string",
-        "metadata": {
-          "description": "Route based (Dynamic Gateway) or Policy based (Static Gateway)"
-        },
-        "defaultValue": "RouteBased",
-        "allowedValues": [
-          "RouteBased",
-          "PolicyBased"
-        ]
-      },
-      
-      "localGatewayIpAddress": {
-        "type": "string",
-        "metadata": {
-          "description": "Public IP of your local/on-prem gateway"
-        }
-      },
-      "localAddressPrefix": {
-        "type": "string",
-        "metadata": {
-          "description": "CIDR block representing the address space of your local/on-prem network's Subnet"
-        }
-    },
-    "gatewaySku": {
-        "type": "string",
-        "defaultValue": "Basic",
-        "allowedValues": [
-          "Basic",
-          "Standard",
-          "HighPerformance"
-        ],
-        "metadata": {
-          "description": "The Sku of the Gateway. This must be one of Basic, Standard or HighPerformance."
-        }
-      },
-      "connectionName": {
-        "type": "string",
-        "defaultValue": "Azure2Other",
-        "metadata": {
-          "description": "Arbitrary name for the new connection between Azure VNet and other network"
-        }
-      },
-      "sharedKey": {
-        "type": "string",
-        "metadata": {
-          "description": "Shared key (PSK) for IPSec tunnel"
-        }
-      },
-
-      "_artifactsLocation": {
-        "type": "string",
-        "metadata": {
-            "description": "The base URI where artifacts required by this template are located including a trailing '/'"
-        },
-        "defaultValue": "https://raw.githubusercontent.com/sredlin/nestedtemplate/master/"
-      },
-    "_artifactsLocationSasToken": {
-        "type": "securestring",
-        "metadata": {
-            "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated. Use the defaultValue if the staging location is not secured."
-        },
-        "defaultValue": ""
-    }
-    },
-    "variables": {
-        "nestedtemplateUriStorage": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/storage.json', parameters('_artifactsLocationSasToken')))]",
-        "nestedtemplateUriavailabilitySets": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/availabilitySets.json', parameters('_artifactsLocationSasToken')))]",
-        "nestedtemplateUrinsg": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/nsg.json', parameters('_artifactsLocationSasToken')))]",
-        "nestedtemplateUripip": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/pip.json', parameters('_artifactsLocationSasToken')))]",
-        "nestedtemplateUrivnet": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/vnet.json', parameters('_artifactsLocationSasToken')))]",
-        "nestedtemplateUrinic": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/nic.json', parameters('_artifactsLocationSasToken')))]",
-        "nestedtemplateUridc": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/dc.json', parameters('_artifactsLocationSasToken')))]",
-        "nestedtemplateUriapp": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/app.json', parameters('_artifactsLocationSasToken')))]",
-        "nestedtemplateUrigw": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/gw.json', parameters('_artifactsLocationSasToken')))]",
-        "nestedtemplateUriconnection": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/connection.json', parameters('_artifactsLocationSasToken')))]"
-
-      },
-
-
-  "resources": [
-    {
-        "name": "storage",
-        "type": "Microsoft.Resources/deployments",
-        "apiVersion": "2018-05-01",
-        "properties": {
-            "mode": "Incremental",
-            "templateLink": {
-              "uri": "[variables('nestedtemplateUriStorage')]"
-            },
-            "parameters": {
-              "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" } }
-          }
-        },
-            {
-        "name": "availabilitySets",
-        "type": "Microsoft.Resources/deployments",
-        "apiVersion": "2018-05-01",
-        "properties": {
-            "mode": "Incremental",
-            "templateLink": {
-              "uri": "[variables('nestedtemplateUriavailabilitySets')]"
-            },
-            "parameters": {
-                "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" }
-            }
-        }
-      },
-      {
-        "name": "nsg",
-        "type": "Microsoft.Resources/deployments",
-        "apiVersion": "2018-05-01",
-        "properties": {
-            "mode": "Incremental",
-            "templateLink": {
-              "uri": "[variables('nestedtemplateUrinsg')]"
-            },
-            "parameters": {
-                "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" }
-            }
-        }
-      },
-      {
-        "name": "pip",
-        "type": "Microsoft.Resources/deployments",
-        "apiVersion": "2018-05-01",
-        "properties": {
-            "mode": "Incremental",
-            "templateLink": {
-              "uri": "[variables('nestedtemplateUripip')]"
-            },
-            "parameters": {
-                "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" },
-                "DCVMCount":{"value": "[parameters('DCVMCount')]" },
-                "APPVMCount": {"value": "[parameters('APPVMCount')]" }
-            }
-        }
-      },
-      {
-        "name": "vnet",
-        "type": "Microsoft.Resources/deployments",
-        "apiVersion": "2018-05-01",
-        "dependsOn": [ "nsg" ],
-        "properties": {
-            "mode": "Incremental",
-            "templateLink": {
-              "uri": "[variables('nestedtemplateUrivnet')]"
-            },
-            "parameters": {
-                "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" }
-            }
-        }
-      },
-      {
-        "name": "nic",
-        "type": "Microsoft.Resources/deployments",
-        "apiVersion": "2018-05-01",
-        "dependsOn": [ "pip",
-                      "vnet"],
-        "properties": {
-            "mode": "Incremental",
-            "templateLink": {
-              "uri": "[variables('nestedtemplateUrinic')]"
-            },
-            "parameters": {
-                "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" },
-                "DCVMCount":{"value": "[parameters('DCVMCount')]" },
-                "APPVMCount": {"value": "[parameters('APPVMCount')]" }
-                
-            }
-        }
-      },
-      {
-        "name": "dc",
-        "type": "Microsoft.Resources/deployments",
-        "apiVersion": "2018-05-01",
-        "dependsOn": [ "pip",
-                      "vnet",
-                      "storage",
-                      "nsg",
-                      "availabilitySets",
-                    "nic"],
-        "properties": {
-            "mode": "Incremental",
-            "templateLink": {
-              "uri": "[variables('nestedtemplateUridc')]"
-            },
-            "parameters": {
-                "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" },
-                "DCVMCount":{"value": "[parameters('DCVMCount')]" },
-                "vmAdminPassword" :{"value": "[parameters('vmAdminPassword')]" }
-            }
-        }
-      },
-      {
-        "name": "app",
-        "type": "Microsoft.Resources/deployments",
-        "apiVersion": "2018-05-01",
-        "dependsOn": [ "pip",
-                      "vnet",
-                      "storage",
-                      "nsg",
-                      "availabilitySets",
-                    "nic"],
-        "properties": {
-            "mode": "Incremental",
-            "templateLink": {
-              "uri": "[variables('nestedtemplateUriapp')]"
-            },
-            "parameters": {
-                "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" },
-                "APPVMCount": {"value": "[parameters('APPVMCount')]" },
-                "vmAdminPassword" :{"value": "[parameters('vmAdminPassword')]" }
-            }
-        }
-      },
-      {
-        "name": "vpn",
-        "type": "Microsoft.Resources/deployments",
-        "apiVersion": "2018-05-01",
-        "dependsOn": [ "pip",
-                      "vnet",
-                      "storage",
-                      "nsg",
-                      "availabilitySets"
-                    ],
-        "properties": {
-            "mode": "Incremental",
-            "templateLink": {
-              "uri": "[variables('nestedtemplateUrigw')]"
-            },
-            "parameters": {
-                "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" },
-                "vpnType":{"value": "[parameters('vpnType')]" },
-                "localGatewayIpAddress":{"value": "[parameters('localGatewayIpAddress')]" },
-                "localAddressPrefix":{"value": "[parameters('localAddressPrefix')]" },
-                "gatewaySku":{"value": "[parameters('gatewaySku')]" }
-
-
-            }
-        }
-      },
-      {
-        "name": "connections",
-        "type": "Microsoft.Resources/deployments",
-        "apiVersion": "2018-05-01",
-        "dependsOn": [ "pip",
-                      "vnet",
-                      "storage",
-                      "nsg",
-                      "availabilitySets",
-                      "vpn"
-                    ],
-        "properties": {
-            "mode": "Incremental",
-            "templateLink": {
-              "uri": "[variables('nestedtemplateUriconnection')]"
-            },
-            "parameters": {
-                "Kundenkuerzel":{"value": "[parameters('Kundenkuerzel')]" },
-                "connectionName":{"value": "[parameters('connectionName')]" },
-                "sharedKey":{"value": "[parameters('sharedKey')]" }
-
-
-            }
-        }
-      }
-
-  ]
-  
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"Kundenkuerzel": {
+			"type": "string",
+			"minLength": 3,
+			"maxLength": 3,
+			"metadata": {
+				"description": "Kundenkuerzel (3 Buchstaben)"
+			}
+		},
+		"DCVMCount": {
+			"type": "int",
+			"defaultValue": 2,
+			"allowedValues": [
+				1,
+				2,
+				5
+			],
+			"metadata": {
+				"description": "Number of VMs to deploy, limit 5"
+			}
+		},
+		"APPVMCount": {
+			"type": "int",
+			"defaultValue": 2,
+			"allowedValues": [
+				1,
+				2,
+				5
+			],
+			"metadata": {
+				"description": "Number of VMs to deploy, limit 5"
+			}
+		},
+		"vmAdminPassword": {
+			"type": "securestring",
+			"metadata": {
+				"description": "Password for the Virtual Machine."
+			}
+		},
+		"vpnType": {
+			"type": "string",
+			"metadata": {
+				"description": "Route based (Dynamic Gateway) or Policy based (Static Gateway)"
+			},
+			"defaultValue": "RouteBased",
+			"allowedValues": [
+				"RouteBased",
+				"PolicyBased"
+			]
+		},
+		"localGatewayIpAddress": {
+			"type": "string",
+			"defaultValue": "10.10.10.10",
+			"metadata": {
+				"description": "Public IP of your local/on-prem gateway"
+			}
+		},
+		"localAddressPrefix": {
+			"type": "string",
+			"defaultValue": "192.168.0.0/24",
+			"metadata": {
+				"description": "CIDR block representing the address space of your local/on-prem network's Subnet"
+			}
+		},
+		"gatewaySku": {
+			"type": "string",
+			"defaultValue": "Basic",
+			"allowedValues": [
+				"Basic",
+				"Standard",
+				"HighPerformance"
+			],
+			"metadata": {
+				"description": "The Sku of the Gateway. This must be one of Basic, Standard or HighPerformance."
+			}
+		},
+		"connectionName": {
+			"type": "string",
+			"defaultValue": "Azure2Other",
+			"metadata": {
+				"description": "Arbitrary name for the new connection between Azure VNet and other network"
+			}
+		},
+		"sharedKey": {
+			"type": "string",
+			"metadata": {
+				"description": "Shared key (PSK) for IPSec tunnel"
+			}
+		},
+		"_artifactsLocation": {
+			"type": "string",
+			"metadata": {
+				"description": "The base URI where artifacts required by this template are located including a trailing '/'"
+			},
+			"defaultValue": "https://raw.githubusercontent.com/sredlin/nestedtemplate/master/"
+		},
+		"_artifactsLocationSasToken": {
+			"type": "securestring",
+			"metadata": {
+				"description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated. Use the defaultValue if the staging location is not secured."
+			},
+			"defaultValue": ""
+		}
+	},
+	"variables": {
+		"nestedtemplateUriStorage": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/storage.json', parameters('_artifactsLocationSasToken')))]",
+		"nestedtemplateUriavailabilitySets": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/availabilitySets.json', parameters('_artifactsLocationSasToken')))]",
+		"nestedtemplateUrinsg": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/nsg.json', parameters('_artifactsLocationSasToken')))]",
+		"nestedtemplateUripip": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/pip.json', parameters('_artifactsLocationSasToken')))]",
+		"nestedtemplateUrivnet": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/vnet.json', parameters('_artifactsLocationSasToken')))]",
+		"nestedtemplateUrinic": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/nic.json', parameters('_artifactsLocationSasToken')))]",
+		"nestedtemplateUridc": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/dc.json', parameters('_artifactsLocationSasToken')))]",
+		"nestedtemplateUriapp": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/app.json', parameters('_artifactsLocationSasToken')))]",
+		"nestedtemplateUrigw": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/gw.json', parameters('_artifactsLocationSasToken')))]",
+		"nestedtemplateUriconnection": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/connection.json', parameters('_artifactsLocationSasToken')))]"
+	},
+	"resources": [
+		{
+			"name": "storage",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-05-01",
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('nestedtemplateUriStorage')]"
+				},
+				"parameters": {
+					"Kundenkuerzel": {
+						"value": "[parameters('Kundenkuerzel')]"
+					}
+				}
+			}
+		},
+		{
+			"name": "availabilitySets",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-05-01",
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('nestedtemplateUriavailabilitySets')]"
+				},
+				"parameters": {
+					"Kundenkuerzel": {
+						"value": "[parameters('Kundenkuerzel')]"
+					}
+				}
+			}
+		},
+		{
+			"name": "nsg",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-05-01",
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('nestedtemplateUrinsg')]"
+				},
+				"parameters": {
+					"Kundenkuerzel": {
+						"value": "[parameters('Kundenkuerzel')]"
+					}
+				}
+			}
+		},
+		{
+			"name": "pip",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-05-01",
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('nestedtemplateUripip')]"
+				},
+				"parameters": {
+					"Kundenkuerzel": {
+						"value": "[parameters('Kundenkuerzel')]"
+					},
+					"DCVMCount": {
+						"value": "[parameters('DCVMCount')]"
+					},
+					"APPVMCount": {
+						"value": "[parameters('APPVMCount')]"
+					}
+				}
+			}
+		},
+		{
+			"name": "vnet",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-05-01",
+			"dependsOn": [
+				"nsg"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('nestedtemplateUrivnet')]"
+				},
+				"parameters": {
+					"Kundenkuerzel": {
+						"value": "[parameters('Kundenkuerzel')]"
+					}
+				}
+			}
+		},
+		{
+			"name": "nic",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-05-01",
+			"dependsOn": [
+				"pip",
+				"vnet"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('nestedtemplateUrinic')]"
+				},
+				"parameters": {
+					"Kundenkuerzel": {
+						"value": "[parameters('Kundenkuerzel')]"
+					},
+					"DCVMCount": {
+						"value": "[parameters('DCVMCount')]"
+					},
+					"APPVMCount": {
+						"value": "[parameters('APPVMCount')]"
+					}
+				}
+			}
+		},
+		{
+			"name": "dc",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-05-01",
+			"dependsOn": [
+				"pip",
+				"vnet",
+				"storage",
+				"nsg",
+				"availabilitySets",
+				"nic"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('nestedtemplateUridc')]"
+				},
+				"parameters": {
+					"Kundenkuerzel": {
+						"value": "[parameters('Kundenkuerzel')]"
+					},
+					"DCVMCount": {
+						"value": "[parameters('DCVMCount')]"
+					},
+					"vmAdminPassword": {
+						"value": "[parameters('vmAdminPassword')]"
+					}
+				}
+			}
+		},
+		{
+			"name": "app",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-05-01",
+			"dependsOn": [
+				"pip",
+				"vnet",
+				"storage",
+				"nsg",
+				"availabilitySets",
+				"nic"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('nestedtemplateUriapp')]"
+				},
+				"parameters": {
+					"Kundenkuerzel": {
+						"value": "[parameters('Kundenkuerzel')]"
+					},
+					"APPVMCount": {
+						"value": "[parameters('APPVMCount')]"
+					},
+					"vmAdminPassword": {
+						"value": "[parameters('vmAdminPassword')]"
+					}
+				}
+			}
+		},
+		{
+			"name": "vpn",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-05-01",
+			"dependsOn": [
+				"pip",
+				"vnet",
+				"storage",
+				"nsg",
+				"availabilitySets"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('nestedtemplateUrigw')]"
+				},
+				"parameters": {
+					"Kundenkuerzel": {
+						"value": "[parameters('Kundenkuerzel')]"
+					},
+					"vpnType": {
+						"value": "[parameters('vpnType')]"
+					},
+					"localGatewayIpAddress": {
+						"value": "[parameters('localGatewayIpAddress')]"
+					},
+					"localAddressPrefix": {
+						"value": "[parameters('localAddressPrefix')]"
+					},
+					"gatewaySku": {
+						"value": "[parameters('gatewaySku')]"
+					}
+				}
+			}
+		},
+		{
+			"name": "connections",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-05-01",
+			"dependsOn": [
+				"pip",
+				"vnet",
+				"storage",
+				"nsg",
+				"availabilitySets",
+				"vpn"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('nestedtemplateUriconnection')]"
+				},
+				"parameters": {
+					"Kundenkuerzel": {
+						"value": "[parameters('Kundenkuerzel')]"
+					},
+					"connectionName": {
+						"value": "[parameters('connectionName')]"
+					},
+					"sharedKey": {
+						"value": "[parameters('sharedKey')]"
+					}
+				}
+			}
+		}
+	]
 }

@@ -1,91 +1,90 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "Kundenkuerzel": {
-            "type": "string",
-            "metadata": {
-            "description": "Kundenkuerzel (3 Buchstaben)"
-            }
-          },
-          "DCVMCount": {
-            "type": "int",
-            "metadata": {
-              "description": "Number of VMs to deploy, limit 5"
-            }
-          },
-          "APPVMCount": {
-            "type": "int",
-            "metadata": {
-              "description": "Number of VMs to deploy, limit 5"
-            }
-          }
-        },
-    "variables": {
-        "location": "[resourceGroup().location]",
-        "charactersToSkip": 7,
-        "vmNameDC": "[tolower(concat(parameters('Kundenkuerzel'),'-vm-dc'))]",
-        "vmNameAPP": "[tolower(concat(parameters('Kundenkuerzel'),'-vm-app'))]",
-        "subnetRefDC": "[concat(variables('vnetID'),'/subnets/',variables('subnetNameDC'))]",
-        "subnetRefAPP": "[concat(variables('vnetID'),'/subnets/',variables('subnetNameApp'))]",
-        "subnetNameDC": "[tolower(concat('sn-dc'))]",
-        "subnetNameAPP": "[tolower(concat('sn-app'))]",
-        "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
-        "virtualNetworkName": "[tolower(concat(parameters('Kundenkuerzel'),'-vn-infrastructure'))]"
-      }, 
-    "resources": [
-        {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Network/networkInterfaces",
-            "name": "[tolower(concat(parameters('Kundenkuerzel'),'-nic-',skip(concat(variables('vmNameDC'),copyindex(1)),variables('charactersToSkip'))))]",
-            "location": "[variables('location')]",
-            "copy": {
-              "name": "nicLoop",
-              "count": "[parameters('DCVMCount')]"
-            },
-              "properties": {
-              "ipConfigurations": [
-                {
-                  "name": "ipconfigpublic",
-                  "properties": {
-                    "privateIPAllocationMethod": "Dynamic",
-                    "publicIPAddress": {
-                      "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(parameters('Kundenkuerzel'),'-pip-',skip(concat(variables('vmNameDC'),copyindex(1)),variables('charactersToSkip'))))]"
-                    },
-                    "subnet": {
-                      "id": "[variables('subnetRefDC')]"
-                    }
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Network/networkInterfaces",
-            "name": "[tolower(concat(parameters('Kundenkuerzel'),'-nic-',skip(concat(variables('vmNameApp'),copyindex(1)),variables('charactersToSkip'))))]",
-            "location": "[variables('location')]",
-            "copy": {
-              "name": "nicLoop",
-              "count": "[parameters('APPVMCount')]"
-            },
-              "properties": {
-              "ipConfigurations": [
-                {
-                  "name": "ipconfigpublic",
-                  "properties": {
-                    "privateIPAllocationMethod": "Dynamic",
-                    "publicIPAddress": {
-                      "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(parameters('Kundenkuerzel'),'-pip-',skip(concat(variables('vmNameAPP'),copyindex(1)),variables('charactersToSkip'))))]"
-                    },
-                    "subnet": {
-                      "id": "[variables('subnetRefAPP')]"
-                    }
-                  }
-                }
-              ]
-            }
-          }
-
-    ]
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"Kundenkuerzel": {
+			"type": "string",
+			"metadata": {
+				"description": "Kundenkuerzel (3 Buchstaben)"
+			}
+		},
+		"DCVMCount": {
+			"type": "int",
+			"metadata": {
+				"description": "Number of VMs to deploy, limit 5"
+			}
+		},
+		"APPVMCount": {
+			"type": "int",
+			"metadata": {
+				"description": "Number of VMs to deploy, limit 5"
+			}
+		}
+	},
+	"variables": {
+		"location": "[resourceGroup().location]",
+		"charactersToSkip": 7,
+		"vmNameDC": "[tolower(concat(parameters('Kundenkuerzel'),'-vm-dc'))]",
+		"vmNameAPP": "[tolower(concat(parameters('Kundenkuerzel'),'-vm-app'))]",
+		"subnetRefDC": "[concat(variables('vnetID'),'/subnets/',variables('subnetNameDC'))]",
+		"subnetRefAPP": "[concat(variables('vnetID'),'/subnets/',variables('subnetNameApp'))]",
+		"subnetNameDC": "[tolower(concat('sn-dc'))]",
+		"subnetNameAPP": "[tolower(concat('sn-app'))]",
+		"vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
+		"virtualNetworkName": "[tolower(concat(parameters('Kundenkuerzel'),'-vn-infrastructure'))]"
+	},
+	"resources": [
+		{
+			"apiVersion": "2015-06-15",
+			"type": "Microsoft.Network/networkInterfaces",
+			"name": "[tolower(concat(parameters('Kundenkuerzel'),'-nic-',skip(concat(variables('vmNameDC'),copyindex(1)),variables('charactersToSkip'))))]",
+			"location": "[variables('location')]",
+			"copy": {
+				"name": "nicLoop",
+				"count": "[parameters('DCVMCount')]"
+			},
+			"properties": {
+				"ipConfigurations": [
+					{
+						"name": "ipconfigpublic",
+						"properties": {
+							"privateIPAllocationMethod": "Dynamic",
+							"publicIPAddress": {
+								"id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(parameters('Kundenkuerzel'),'-pip-',skip(concat(variables('vmNameDC'),copyindex(1)),variables('charactersToSkip'))))]"
+							},
+							"subnet": {
+								"id": "[variables('subnetRefDC')]"
+							}
+						}
+					}
+				]
+			}
+		},
+		{
+			"apiVersion": "2015-06-15",
+			"type": "Microsoft.Network/networkInterfaces",
+			"name": "[tolower(concat(parameters('Kundenkuerzel'),'-nic-',skip(concat(variables('vmNameApp'),copyindex(1)),variables('charactersToSkip'))))]",
+			"location": "[variables('location')]",
+			"copy": {
+				"name": "nicLoop",
+				"count": "[parameters('APPVMCount')]"
+			},
+			"properties": {
+				"ipConfigurations": [
+					{
+						"name": "ipconfigpublic",
+						"properties": {
+							"privateIPAllocationMethod": "Dynamic",
+							"publicIPAddress": {
+								"id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(parameters('Kundenkuerzel'),'-pip-',skip(concat(variables('vmNameAPP'),copyindex(1)),variables('charactersToSkip'))))]"
+							},
+							"subnet": {
+								"id": "[variables('subnetRefAPP')]"
+							}
+						}
+					}
+				]
+			}
+		}
+	]
 }
