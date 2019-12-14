@@ -30,7 +30,7 @@
 		"vmOsSku": "2019-Datacenter",
 		"imagePublisher": "MicrosoftWindowsServer",
 		"imageOffer": "WindowsServer",
-		"VMStorageTypeDC": "Standard_LRS",
+		"VMStorageTypeDC": "Premium_LRS",
 		"vmDataDiskCountDC": 4,
 		"vmDataDiskSize": "1",
 		"charactersToSkip": 7,
