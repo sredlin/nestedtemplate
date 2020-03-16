@@ -40,56 +40,6 @@
 				"description": "Password for the Virtual Machine."
 			}
 		},
-		"vpnType": {
-			"type": "string",
-			"metadata": {
-				"description": "Route based (Dynamic Gateway) or Policy based (Static Gateway)"
-			},
-			"defaultValue": "RouteBased",
-			"allowedValues": [
-				"RouteBased",
-				"PolicyBased"
-			]
-		},
-		"localGatewayIpAddress": {
-			"type": "string",
-			"defaultValue": "10.10.10.10",
-			"metadata": {
-				"description": "Public IP of your local/on-prem gateway"
-			}
-		},
-		"localAddressPrefix": {
-			"type": "string",
-			"defaultValue": "192.168.0.0/24",
-			"metadata": {
-				"description": "CIDR block representing the address space of your local/on-prem network's Subnet"
-			}
-		},
-		"gatewaySku": {
-			"type": "string",
-			"defaultValue": "Basic",
-			"allowedValues": [
-				"Basic",
-				"Standard",
-				"HighPerformance"
-			],
-			"metadata": {
-				"description": "The Sku of the Gateway. This must be one of Basic, Standard or HighPerformance."
-			}
-		},
-		"connectionName": {
-			"type": "string",
-			"defaultValue": "Azure2Other",
-			"metadata": {
-				"description": "Arbitrary name for the new connection between Azure VNet and other network"
-			}
-		},
-		"sharedKey": {
-			"type": "string",
-			"metadata": {
-				"description": "Shared key (PSK) for IPSec tunnel"
-			}
-		},
 		"_artifactsLocation": {
 			"type": "string",
 			"metadata": {
@@ -114,8 +64,6 @@
 		"nestedtemplateUrinic": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/nic.json', parameters('_artifactsLocationSasToken')))]",
 		"nestedtemplateUridc": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/dc.json', parameters('_artifactsLocationSasToken')))]",
 		"nestedtemplateUrirds": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/rds.json', parameters('_artifactsLocationSasToken')))]",
-		"nestedtemplateUrigw": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/gw.json', parameters('_artifactsLocationSasToken')))]",
-		"nestedtemplateUriconnection": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/connection.json', parameters('_artifactsLocationSasToken')))]"
 	},
 	"resources": [
 		{
@@ -292,71 +240,8 @@
 					}
 				}
 			}
-		},
-		{
-			"name": "vpn",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2018-05-01",
-			"dependsOn": [
-				"pip",
-				"vnet",
-				"storage",
-				"nsg",
-				"availabilitySets"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[variables('nestedtemplateUrigw')]"
-				},
-				"parameters": {
-					"Kundenkuerzel": {
-						"value": "[parameters('Kundenkuerzel')]"
-					},
-					"vpnType": {
-						"value": "[parameters('vpnType')]"
-					},
-					"localGatewayIpAddress": {
-						"value": "[parameters('localGatewayIpAddress')]"
-					},
-					"localAddressPrefix": {
-						"value": "[parameters('localAddressPrefix')]"
-					},
-					"gatewaySku": {
-						"value": "[parameters('gatewaySku')]"
-					}
-				}
-			}
-		},
-		{
-			"name": "connections",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2018-05-01",
-			"dependsOn": [
-				"pip",
-				"vnet",
-				"storage",
-				"nsg",
-				"availabilitySets",
-				"vpn"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[variables('nestedtemplateUriconnection')]"
-				},
-				"parameters": {
-					"Kundenkuerzel": {
-						"value": "[parameters('Kundenkuerzel')]"
-					},
-					"connectionName": {
-						"value": "[parameters('connectionName')]"
-					},
-					"sharedKey": {
-						"value": "[parameters('sharedKey')]"
-					}
-				}
-			}
 		}
+		
+		
 	]
 }
