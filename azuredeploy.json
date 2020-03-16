@@ -22,7 +22,7 @@
 				"description": "Number of VMs to deploy, limit 5"
 			}
 		},
-		"APPVMCount": {
+		"RdsVMCount": {
 			"type": "int",
 			"defaultValue": 2,
 			"allowedValues": [
@@ -113,7 +113,7 @@
 		"nestedtemplateUrivnet": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/vnet.json', parameters('_artifactsLocationSasToken')))]",
 		"nestedtemplateUrinic": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/nic.json', parameters('_artifactsLocationSasToken')))]",
 		"nestedtemplateUridc": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/dc.json', parameters('_artifactsLocationSasToken')))]",
-		"nestedtemplateUriapp": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/app.json', parameters('_artifactsLocationSasToken')))]",
+		"nestedtemplateUrirds": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/rds.json', parameters('_artifactsLocationSasToken')))]",
 		"nestedtemplateUrigw": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/gw.json', parameters('_artifactsLocationSasToken')))]",
 		"nestedtemplateUriconnection": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/connection.json', parameters('_artifactsLocationSasToken')))]"
 	},
@@ -182,8 +182,8 @@
 					"DCVMCount": {
 						"value": "[parameters('DCVMCount')]"
 					},
-					"APPVMCount": {
-						"value": "[parameters('APPVMCount')]"
+					"RdsVMCount": {
+						"value": "[parameters('RdsVMCount')]"
 					}
 				}
 			}
@@ -227,8 +227,8 @@
 					"DCVMCount": {
 						"value": "[parameters('DCVMCount')]"
 					},
-					"APPVMCount": {
-						"value": "[parameters('APPVMCount')]"
+					"RdsVMCount": {
+						"value": "[parameters('RdsVMCount')]"
 					}
 				}
 			}
@@ -264,7 +264,7 @@
 			}
 		},
 		{
-			"name": "app",
+			"name": "rds",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2018-05-01",
 			"dependsOn": [
@@ -278,14 +278,14 @@
 			"properties": {
 				"mode": "Incremental",
 				"templateLink": {
-					"uri": "[variables('nestedtemplateUriapp')]"
+					"uri": "[variables('nestedtemplateUrirds')]"
 				},
 				"parameters": {
 					"Kundenkuerzel": {
 						"value": "[parameters('Kundenkuerzel')]"
 					},
-					"APPVMCount": {
-						"value": "[parameters('APPVMCount')]"
+					"RdsVMCount": {
+						"value": "[parameters('RdsVMCount')]"
 					},
 					"vmAdminPassword": {
 						"value": "[parameters('vmAdminPassword')]"
