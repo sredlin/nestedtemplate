@@ -14,7 +14,7 @@
 				"description": "Password for the Virtual Machine."
 			}
 		},
-		"APPVMCount": {
+		"RDSVMCount": {
 			"type": "int",
 			"metadata": {
 				"description": "Number of VMs to deploy, limit 5"
@@ -24,15 +24,15 @@
 	"variables": {
 		"location": "[resourceGroup().location]",
 		"DiagStorageName": "[tolower(concat(parameters('Kundenkuerzel'),'sadiag'))]",
-		"vmNameApp": "[tolower(concat(parameters('Kundenkuerzel'),'-vm-app'))]",
-		"vmSizeAPP": "Standard_B2s",
+		"vmNameRds": "[tolower(concat(parameters('Kundenkuerzel'),'-vm-rds'))]",
+		"vmSizeRds": "Standard_B2s",
 		"vmAdminUsername": "vbu-adm",
 		"vmOsSku": "2019-Datacenter",
 		"imagePublisher": "MicrosoftWindowsServer",
 		"imageOffer": "WindowsServer",
-		"VMStorageTypeOSApp": "Standard_LRS",
-		"VMStorageTypeApp": "Premium_LRS",
-		"vmDataDiskCountApp": 4,
+		"VMStorageTypeOSRds": "Standard_LRS",
+		"VMStorageTypeRds": "Premium_LRS",
+		"vmDataDiskCountRds": 4,
 		"vmDataDiskSize": "15",
 		"charactersToSkip": 7
 	},
@@ -40,18 +40,18 @@
 		{
 			"apiVersion": "2017-03-30",
 			"type": "Microsoft.Compute/virtualMachines",
-			"name": "[concat(variables('vmNameApp'),copyindex(1))]",
+			"name": "[concat(variables('vmNameRds'),copyindex(1))]",
 			"location": "[variables('location')]",
 			"copy": {
-				"name": "appLoop",
-				"count": "[parameters('AppVMCount')]"
+				"name": "rdsLoop",
+				"count": "[parameters('RdsVMCount')]"
 			},
 			"properties": {
 				"hardwareProfile": {
-					"vmSize": "[variables('vmSizeApp')]"
+					"vmSize": "[variables('vmSizeRds')]"
 				},
 				"osProfile": {
-					"computerName": "[concat(variables('vmNameApp'),copyindex(1))]",
+					"computerName": "[concat(variables('vmNameRds'),copyindex(1))]",
 					"adminUsername": "[variables('vmAdminUsername')]",
 					"adminPassword": "[parameters('vmAdminPassword')]"
 				},
@@ -63,24 +63,24 @@
 						"version": "latest"
 					},
 					"osDisk": {
-						"name": "[concat(variables('vmNameApp'),copyindex(1),'-osdisk')]",
+						"name": "[concat(variables('vmNameRds'),copyindex(1),'-osdisk')]",
 						"caching": "ReadWrite",
 						"createOption": "FromImage",
 						"managedDisk": {
-							"storageAccountType": "[variables('VMStorageTypeOSApp')]"
+							"storageAccountType": "[variables('VMStorageTypeOSRds')]"
 						}
 					},
 					"copy": [
 						{
 							"name": "dataDisks",
-							"count": "[variables('vmDataDiskCountApp')]",
+							"count": "[variables('vmDataDiskCountRds')]",
 							"input": {
-								"name": "[concat(variables('vmNameApp'),copyindex(1),'-datadisk','-',copyIndex('dataDisks'))]",
+								"name": "[concat(variables('vmNameRds'),copyindex(1),'-datadisk','-',copyIndex('dataDisks'))]",
 								"diskSizeGB": "[variables('vmDataDiskSize')]",
 								"lun": "[copyIndex('dataDisks')]",
 								"createOption": "Empty",
 								"managedDisk": {
-									"storageAccountType": "[variables('VMStorageTypeApp')]"
+									"storageAccountType": "[variables('VMStorageTypeRds')]"
 								}
 							}
 						}
