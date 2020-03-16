@@ -12,7 +12,7 @@
 	"variables": {
 		"location": "[resourceGroup().location]",
 		"availabilitySetNameDC": "[tolower(concat(parameters('Kundenkuerzel'),'-as-dc'))]",
-		"availabilitySetNameAPP": "[tolower(concat(parameters('Kundenkuerzel'),'-as-app'))]"
+		"availabilitySetNameRds": "[tolower(concat(parameters('Kundenkuerzel'),'-as-rds'))]"
 	},
 	"resources": [
 		{
@@ -31,7 +31,7 @@
 		{
 			"type": "Microsoft.Compute/availabilitySets",
 			"apiVersion": "2019-03-01",
-			"name": "[variables('availabilitySetNameApp')]",
+			"name": "[variables('availabilitySetNameRds')]",
 			"location": "[variables('location')]",
 			"sku": {
 				"name": "Aligned"
