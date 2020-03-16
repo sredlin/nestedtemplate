@@ -14,7 +14,7 @@
 				"description": "Number of VMs to deploy, limit 5"
 			}
 		},
-		"APPVMCount": {
+		"RdsVMCount": {
 			"type": "int",
 			"metadata": {
 				"description": "Number of VMs to deploy, limit 5"
@@ -25,7 +25,7 @@
 		"location": "[resourceGroup().location]",
 		"charactersToSkip": 7,
 		"vmNameDC": "[tolower(concat(parameters('Kundenkuerzel'),'-vm-dc'))]",
-		"vmNameAPP": "[tolower(concat(parameters('Kundenkuerzel'),'-vm-app'))]",
+		"vmNameRds": "[tolower(concat(parameters('Kundenkuerzel'),'-vm-rds'))]",
 		"publicIPAddressType": "Dynamic",
 		"publicIPAddressTypeGW": "Dynamic"
 	},
@@ -49,16 +49,16 @@
 		{
 			"apiVersion": "2015-06-15",
 			"type": "Microsoft.Network/publicIPAddresses",
-			"name": "[tolower(concat(parameters('Kundenkuerzel'),'-pip-',skip(concat(variables('vmNameAPP'),copyindex(1)),variables('charactersToSkip'))))]",
+			"name": "[tolower(concat(parameters('Kundenkuerzel'),'-pip-',skip(concat(variables('vmNameRds'),copyindex(1)),variables('charactersToSkip'))))]",
 			"location": "[variables('location')]",
 			"copy": {
-				"name": "publicIPLoopAPP",
-				"count": "[parameters('APPVMCount')]"
+				"name": "publicIPLoopRds",
+				"count": "[parameters('RdsVMCount')]"
 			},
 			"properties": {
 				"publicIPAllocationMethod": "[variables('publicIPAddressType')]",
 				"dnsSettings": {
-					"domainNameLabel": "[tolower(concat(parameters('Kundenkuerzel'),'-dns-',skip(concat(variables('vmNameAPP'),copyindex(1)),variables('charactersToSkip'))))]"
+					"domainNameLabel": "[tolower(concat(parameters('Kundenkuerzel'),'-dns-',skip(concat(variables('vmNameRds'),copyindex(1)),variables('charactersToSkip'))))]"
 				}
 			}
 		},
