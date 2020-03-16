@@ -63,7 +63,7 @@
 		"nestedtemplateUrivnet": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/vnet.json', parameters('_artifactsLocationSasToken')))]",
 		"nestedtemplateUrinic": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/nic.json', parameters('_artifactsLocationSasToken')))]",
 		"nestedtemplateUridc": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/dc.json', parameters('_artifactsLocationSasToken')))]",
-		"nestedtemplateUrirds": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/rds.json', parameters('_artifactsLocationSasToken')))]",
+		"nestedtemplateUrirds": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/rds.json', parameters('_artifactsLocationSasToken')))]"
 	},
 	"resources": [
 		{
@@ -241,7 +241,6 @@
 				}
 			}
 		}
-		
-		
+	
 	]
 }
