@@ -16,8 +16,8 @@
 		"nsgIDInfrastructure": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('nsgNameInfrastructure'))]",
 		"subnetPrefixDC": "10.0.0.0/24",
 		"subnetNameDC": "[tolower(concat('sn-dc'))]",
-		"subnetPrefixAPP": "10.0.1.0/24",
-		"subnetNameAPP": "[tolower(concat('sn-app'))]",
+		"subnetPrefixRds": "10.0.1.0/24",
+		"subnetNameRds": "[tolower(concat('sn-rds'))]",
 		"addressPrefix": "10.0.0.0/16",
 		"gatewaySubnet": "GatewaySubnet",
 		"gatewaySubnetPrefix": "10.0.254.0/28"
@@ -45,9 +45,9 @@
 						}
 					},
 					{
-						"name": "[variables('subnetNameApp')]",
+						"name": "[variables('subnetNameRds')]",
 						"properties": {
-							"addressPrefix": "[variables('subnetPrefixAPP')]",
+							"addressPrefix": "[variables('subnetPrefixRds')]",
 							"networkSecurityGroup": {
 								"id": "[variables('nsgIDInfrastructure')]"
 							}
